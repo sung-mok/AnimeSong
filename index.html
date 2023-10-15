@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
         body, html {
             height: 100%;
@@ -193,19 +193,24 @@
         }
 
         function togglePlaybackMode() {
-            if (currentMode === '일시정지') {
-                currentMode = '재생';
-                playRandomSong();
-                document.getElementById('frameImage').src = 'tape.gif';
-                document.getElementById('controlButton').src = '일시정지버튼.png';
-            } else {
-                currentMode = '일시정지';
-                player.pauseVideo();
-                document.getElementById('frameImage').src = 'frame_0.png';
-                document.getElementById('controlButton').src = '재생버튼.png';
-            }
-            updateModeIndicator();
+    if (currentMode === '일시정지') {
+        currentMode = '재생';
+        if (!player.getCurrentTime()) { // 현재 재생 중인 시간이 없으면 새 곡을 선택 및 재생
+            playRandomSong();
+        } else {
+            player.playVideo(); // 그렇지 않으면 현재 비디오를 계속 재생
         }
+        document.getElementById('frameImage').src = 'tape.gif';
+        document.getElementById('controlButton').src = '일시정지버튼.png';
+    } else {
+        currentMode = '일시정지';
+        player.pauseVideo();
+        document.getElementById('frameImage').src = 'frame_0.png';
+        document.getElementById('controlButton').src = '재생버튼.png';
+    }
+    updateModeIndicator();
+}
+
 
         function updateModeIndicator() {
             const indicator = document.getElementById('modeIndicator');
