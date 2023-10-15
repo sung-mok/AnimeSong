@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습7</title>
+    <title>재생연습8</title>
     <style>
         body, html {
             height: 100%;
@@ -163,12 +163,16 @@
     }
 
     function loadSongs() {
-        fetch('./Song.json')
-            .then(response => response.json())
-            .then(data => {
-                songs = data.songs;
-            });
-    }
+    fetch('./Song.json')
+        .then(response => response.json())
+        .then(data => {
+            songs = data.songs;
+            if (currentMode === '재생') { // 만약 현재 모드가 '재생' 모드라면
+                playRandomSong();       // 랜덤한 곡을 재생합니다.
+            }
+        });
+}
+
 
     function playRandomSong() {
         const randomIndex = Math.floor(Math.random() * songs.length);
