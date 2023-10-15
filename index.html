@@ -179,7 +179,12 @@ function initYouTubePlayer() {
 }
 
 // 웹 페이지 로드 시 프리로딩 시작
-window.onload = preloadResources;
+window.onload = function() {
+    preloadResources();
+    
+    const submitButton = document.getElementById('submitAnswer');
+    submitButton.addEventListener('click', checkAnswer);
+}
 
 function loadAndPlayRandomSongFromJSON() {
     fetch('Song.json')
@@ -273,6 +278,28 @@ function toggleAnimation() {
 
     updateStatusText();
 }
+
+
+        function checkAnswer() {
+    const inputText = document.getElementById('inputText').value;
+    const answerResult = document.getElementById('answerResult');
+
+    fetch('Song.json')
+        .then(response => response.json())
+        .then(data => {
+            const songs = data.songs;
+            const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
+
+            if (currentSong) {
+                if (inputText === currentSong.answer) {
+                    answerResult.textContent = "정답!";
+                } else {
+                    answerResult.textContent = "실패!";
+                }
+            }
+        });
+}
+
 </script>
 
 
@@ -299,6 +326,8 @@ function toggleAnimation() {
             <div class="progress-bar-inner"></div>
         </div>
         <input type="text" id="inputText" placeholder="여기에 텍스트를 입력하세요...">
+        <button id="submitAnswer">답 제출</button> <!-- 추가된 버튼 -->
+        <div id="answerResult" style="position: absolute; top: 10px; right: 10px;"></div> <!-- 정답 여부를 표시할 요소 -->
     </div>
     <div id="player" style="display:none;"></div>
 </body>
