@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>페이즈 트랜지션1</title>
+    <title>재생연습</title>
     <style>
         body, html {
             height: 100%;
@@ -101,6 +101,8 @@
             background: #3498db;
         }
     </style>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 
 <body>
@@ -111,6 +113,7 @@
         <img src="signpost.png" alt="Signpost Phase 1" id="signpost">
     </div>
     <div class="phase phase2">
+        <div id="youtubePlayer"></div>
         <div class="mode-indicator" id="modeIndicator"></div>
         <img class="frame" src="frame_0.png" alt="Frame Image" id="frameImage">
         <div class="progress-container">
@@ -122,6 +125,46 @@
     <script>
         let currentPhase = 'phase0';
         let currentMode = '일시정지';
+
+        let player;
+        let songs = [];
+
+        function loadSongs() {
+            fetch('/mnt/data/Song.json')
+                .then(response => response.json())
+                .then(data => {
+                    songs = data;
+                    playRandomSong();  // 곡 목록 로딩 후 랜덤한 곡 재생
+                });
+        }
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtubePlayer', {
+                height: '0',  // 플레이어를 숨깁니다.
+                width: '0',
+                videoId: '',  // 초기에는 비디오를 로드하지 않습니다.
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // 플레이어 준비가 되면 곡 목록을 로드합니다.
+            loadSongs();
+        }
+
+        function playRandomSong() {
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            const randomSong = songs[randomIndex];
+            playSong(randomSong.youtube_link);
+        }
+
+        function playSong(youtubeLink) {
+            const videoId = youtubeLink.split("v=")[1];
+            player.loadVideoById(videoId);
+        }
+
 
         const frameImage = document.getElementById('frameImage');
          const controlButton = document.getElementById('controlButton');
