@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습6</title>
+    <title>재생연습7</title>
     <style>
         body, html {
             height: 100%;
@@ -139,120 +139,109 @@
     </div>
 
     <script>
-        let currentPhase = 'phase0';
-        let currentMode = '일시정지';
+    let currentPhase = 'phase0';
+    let currentMode = '일시정지';
 
-        let player;
-        let songs = [];
+    let player;
+    let songs = [];
 
-        function loadSongs() {
-            fetch('./Song.json')
-                .then(response => response.json())
-                .then(data => {
-                    songs = data;
-                    playRandomSong();  // 곡 목록 로딩 후 랜덤한 곡 재생
-                }); 
-        let currentPhase = 'phase0';
-        let currentMode = '일시정지';
-        let player;
-        let songs = [];
-
-        // 유튜브 API 준비 완료 시 호출되는 함수
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtubePlayer', {
-                height: '0',
-                width: '0',
-                videoId: '',
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            // 곡 목록을 로드합니다.
-            loadSongs();
-        }
-
-        function loadSongs() {
-            fetch('Song.json')
-                .then(response => response.json())
-                .then(data => {
-                    songs = data.songs;
-                });
-        }
-
-        function playRandomSong() {
-            const randomIndex = Math.floor(Math.random() * songs.length);
-            const randomSong = songs[randomIndex];
-            playSong(randomSong.youtube_link);
-            showSongInfo(randomSong);
-        }
-
-        function playSong(youtubeLink) {
-            const videoId = youtubeLink.split("v=")[1];
-            player.loadVideoById(videoId);
-        }
-
-        function showSongInfo(song) {
-            const songInfoElement = document.getElementById('songInfo');
-            songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
-            songInfoElement.style.display = 'block';
-        }
-
-        function togglePlaybackMode() {
-            if (currentMode === '일시정지') {
-                currentMode = '재생';
-                playRandomSong();
-                document.getElementById('frameImage').src = 'tape.gif';
-                document.getElementById('controlButton').src = '일시정지버튼.png';
-            } else {
-                currentMode = '일시정지';
-                player.pauseVideo();
-                document.getElementById('frameImage').src = 'frame_0.png';
-                document.getElementById('controlButton').src = '재생버튼.png';
+    // 유튜브 API 준비 완료 시 호출되는 함수
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtubePlayer', {
+            height: '0',
+            width: '0',
+            videoId: '',
+            events: {
+                'onReady': onPlayerReady
             }
-            updateModeIndicator();
-        }
+        });
+    }
 
-        function updateModeIndicator() {
-            const indicator = document.getElementById('modeIndicator');
-            indicator.textContent = `모드: ${currentMode}`;
-        }
+    function onPlayerReady(event) {
+        // 곡 목록을 로드합니다.
+        loadSongs();
+    }
 
-        function moveToNextPhase() {
-            const currentElement = document.querySelector(`.${currentPhase}`);
-            currentElement.classList.add('slide-out');
-            currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
-            const nextElement = document.querySelector(`.${currentPhase}`);
-            nextElement.style.transform = 'translateX(0%)';
-        }
-
-        function preloadAssets() {
-            const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
-            let loadedCount = 0;
-
-            imagesToLoad.forEach(src => {
-                const img = new Image();
-                img.onload = () => {
-                    loadedCount++;
-                    if (loadedCount === imagesToLoad.length) {
-                        moveToNextPhase();
-                    }
-                };
-                img.src = src;
+    function loadSongs() {
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = data.songs;
             });
+    }
+
+    function playRandomSong() {
+        const randomIndex = Math.floor(Math.random() * songs.length);
+        const randomSong = songs[randomIndex];
+        playSong(randomSong.youtube_link);
+        showSongInfo(randomSong);
+    }
+
+    function playSong(youtubeLink) {
+        const videoId = youtubeLink.split("v=")[1];
+        player.loadVideoById(videoId);
+    }
+
+    function showSongInfo(song) {
+        const songInfoElement = document.getElementById('songInfo');
+        songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
+        songInfoElement.style.display = 'block';
+    }
+
+    function togglePlaybackMode() {
+        if (currentMode === '일시정지') {
+            currentMode = '재생';
+            playRandomSong();
+            document.getElementById('frameImage').src = 'tape.gif';
+            document.getElementById('controlButton').src = '일시정지버튼.png';
+        } else {
+            currentMode = '일시정지';
+            player.pauseVideo();
+            document.getElementById('frameImage').src = 'frame_0.png';
+            document.getElementById('controlButton').src = '재생버튼.png';
         }
+        updateModeIndicator();
+    }
 
-        document.getElementById('signpost').addEventListener('click', moveToNextPhase);
-        document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
-        document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
+    function updateModeIndicator() {
+        const indicator = document.getElementById('modeIndicator');
+        indicator.textContent = `모드: ${currentMode}`;
+    }
 
-        window.onload = function() {
-            updateModeIndicator();
-            preloadAssets();
-        };
-            </script>
+    function moveToNextPhase() {
+        const currentElement = document.querySelector(`.${currentPhase}`);
+        currentElement.classList.add('slide-out');
+        currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
+        const nextElement = document.querySelector(`.${currentPhase}`);
+        nextElement.style.transform = 'translateX(0%)';
+    }
+
+    function preloadAssets() {
+        const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
+        let loadedCount = 0;
+
+        imagesToLoad.forEach(src => {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === imagesToLoad.length) {
+                    moveToNextPhase();
+                }
+            };
+            img.src = src;
+        });
+    }
+
+    document.getElementById('signpost').addEventListener('click', moveToNextPhase);
+    document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
+    document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
+
+    window.onload = function() {
+        updateModeIndicator();
+        preloadAssets();
+    };
+</script>
+
 </body>
 
 </html>
