@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습5</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -138,31 +138,20 @@
         <img class="play-button" src="재생버튼.png" alt="Play Button" id="controlButton">
     </div>
 
-    <script>
-        let currentPhase = 'phase0';
-        let currentMode = '일시정지';
-
-        let player;
-        let songs = [];
-
-        function loadSongs() {
-            fetch('./Song.json')
-                .then(response => response.json())
-                .then(data => {
-                    songs = data;
-                    playRandomSong();  // 곡 목록 로딩 후 랜덤한 곡 재생
-                }); 
+     <script>
         let currentPhase = 'phase0';
         let currentMode = '일시정지';
         let player;
         let songs = [];
 
-        // 유튜브 API 준비 완료 시 호출되는 함수
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtubePlayer', {
                 height: '0',
                 width: '0',
                 videoId: '',
+                playerVars: {
+                    'origin': window.location.href // 현재 페이지의 도메인을 origin으로 설정합니다.
+                },
                 events: {
                     'onReady': onPlayerReady
                 }
@@ -170,7 +159,6 @@
         }
 
         function onPlayerReady(event) {
-            // 곡 목록을 로드합니다.
             loadSongs();
         }
 
@@ -179,7 +167,11 @@
                 .then(response => response.json())
                 .then(data => {
                     songs = data.songs;
-                });
+                    if (currentMode === '재생') {
+                        playRandomSong();
+                    }
+                })
+                .catch(error => console.error('Error loading song data:', error));
         }
 
         function playRandomSong() {
@@ -253,6 +245,7 @@
             preloadAssets();
         };
     </script>
+
 </body>
 
 </html>
