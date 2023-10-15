@@ -91,6 +91,15 @@
     let isAnimating = false;
     let videoDuration = 0;
 
+
+let playerReady = false; // 추가된 변수
+
+function onPlayerReady(event) {
+    playerReady = true; // player가 준비되었음을 나타냅니다.
+    loadAndPlayRandomSongFromJSON();
+    videoDuration = player.getDuration();
+}
+
 function updateStatusText() {
     const statusText = document.getElementById('statusText');
     statusText.textContent = isAnimating ? '재생' : '일시정지';
