@@ -86,21 +86,18 @@
     <!-- YouTube API 스크립트 -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-      let player;
-      let isAnimating = false;
+ let player;
+let isAnimating = false;
 
-    function updateStatusText() {
-        const statusText = document.getElementById('statusText');
-        statusText.textContent = isAnimating ? '재생' : '일시정지';
-    }
+function updateStatusText() {
+    const statusText = document.getElementById('statusText');
+    statusText.textContent = isAnimating ? '재생' : '일시정지';
+}
 
-    let videoDuration = 0;
+let videoDuration = 0;
 
-
-
-        // 프리로딩 함수
-    function preloadResources() {
-    // 로딩할 리소스 목록
+// 프리로딩 함수
+function preloadResources() {
     const resources = [
         'signpost.png',
         'tape_frame/frame_0.png',
@@ -122,7 +119,7 @@
                     throw new Error(`Failed to load ${resource}`);
                 })
                 .then(() => {
-                    console.log(`Loaded: ${resource}`);  // 로딩 상태 출력
+                    console.log(`Loaded: ${resource}`);
                     loadedCount++;
                     if (loadedCount === resources.length) {
                         hideLoadingScreen();
@@ -132,7 +129,7 @@
         } else {
             const img = new Image();
             img.onload = () => {
-                console.log(`Loaded: ${resource}`);  // 로딩 상태 출력
+                console.log(`Loaded: ${resource}`);
                 loadedCount++;
                 if (loadedCount === resources.length) {
                     hideLoadingScreen();
@@ -146,19 +143,6 @@
     });
 }
 
-
-        
-
-function loadJSON() {
-    fetch('Song.json')
-        .then(response => response.json())
-        .then(data => {
-            // 필요한 경우 여기서 JSON 데이터를 처리합니다.
-            hideLoadingScreen();  // 모든 리소스가 로드된 후 로딩 화면 숨기기
-        });
-}
-
-
 // 로딩 화면 숨기기 함수
 function hideLoadingScreen() {
     const loadingPhase = document.getElementById('loadingPhase');
@@ -166,15 +150,11 @@ function hideLoadingScreen() {
 
     loadingPhase.style.transform = 'translateX(-100%)';
     phase1.style.transform = 'translateX(0)';
+    
+    initYouTubePlayer();
 }
 
-// 웹 페이지가 로드되었을 때 프리로딩 시작
-window.onload = preloadResources;
-
-
-        
-
-function onYouTubeIframeAPIReady() {
+function initYouTubePlayer() {
     player = new YT.Player('player', {
         height: '0',
         width: '0',
@@ -198,8 +178,11 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
+// 웹 페이지 로드 시 프리로딩 시작
+window.onload = preloadResources;
+
 function loadAndPlayRandomSongFromJSON() {
-    fetch('Song.json')  // JSON 파일의 경로 수정
+    fetch('Song.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -234,25 +217,25 @@ function extractVideoID(url) {
 }
 
 function onPlayerReady(event) {
-    loadAndPlayRandomSongFromJSON();  // 플레이어가 준비되면 JSON에서 노래 정보를 가져와 재생
-    videoDuration = player.getDuration();  // 영상의 전체 길이를 가져옵니다.
+    loadAndPlayRandomSongFromJSON();
+    videoDuration = player.getDuration();
 }
 
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.PLAYING) {
-        updateProgressBar();  // 영상이 재생되면 프로그레스바를 업데이트합니다.
+        updateProgressBar();
     }
 }
 
 function updateProgressBar() {
     const progressBarInner = document.querySelector('.progress-bar-inner');
-    const currentTime = player.getCurrentTime();  // 현재 재생 위치를 가져옵니다.
+    const currentTime = player.getCurrentTime();
 
-    const percentage = (currentTime / videoDuration) * 100;  // 재생 위치의 백분율을 계산합니다.
-    progressBarInner.style.width = percentage + '%';  // 프로그레스바의 너비를 설정합니다.
+    const percentage = (currentTime / videoDuration) * 100;
+    progressBarInner.style.width = percentage + '%';
 
     if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-        setTimeout(updateProgressBar, 500);  // 0.5초마다 프로그레스바를 업데이트합니다.
+        setTimeout(updateProgressBar, 500);
     }
 }
 
@@ -276,12 +259,12 @@ function toggleAnimation() {
     const pauseIcon = document.querySelector('.pause-icon');
 
     if (isAnimating) {
-        tapeImage.src = "tape_frame/frame_0.png"; // 애니메이션을 멈출 때 정적 이미지로 변경
+        tapeImage.src = "tape_frame/frame_0.png";
         player.pauseVideo();
         playIcon.style.display = 'block';
         pauseIcon.style.display = 'none';
     } else {
-        tapeImage.src = "tape.gif"; // 애니메이션을 시작할 때 GIF로 변경
+        tapeImage.src = "tape.gif";
         player.playVideo();
         playIcon.style.display = 'none';
         pauseIcon.style.display = 'block';
@@ -290,8 +273,10 @@ function toggleAnimation() {
 
     updateStatusText();
 }
+</script>
 
-    </script>
+
+    
 </head>
 <body>
     <!-- 로딩 화면 -->
