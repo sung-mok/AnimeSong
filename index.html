@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
         body, html {
             height: 100%;
@@ -24,6 +24,20 @@
             align-items: center;
             transition: transform 0.5s;
             transform: translateX(100%);
+        }
+
+
+        .song-info {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 14px;
+        display: none; /* 초기에는 숨김 */
         }
 
         .phase0 {
@@ -113,6 +127,8 @@
         <img src="signpost.png" alt="Signpost Phase 1" id="signpost">
     </div>
     <div class="phase phase2">
+        <!-- 곡 정보 표시기 추가 -->
+        <div class="song-info" id="songInfo"></div>
         <div id="youtubePlayer"></div>
         <div class="mode-indicator" id="modeIndicator"></div>
         <img class="frame" src="frame_0.png" alt="Frame Image" id="frameImage">
@@ -218,6 +234,17 @@
         function updateModeIndicator() {
             const indicator = document.getElementById('modeIndicator');
             indicator.textContent = `모드: ${currentMode}`;
+        }
+
+        function playRandomSong() {
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            const randomSong = songs[randomIndex];
+            playSong(randomSong.youtube_link);
+
+            // 선택된 랜덤한 곡의 정보를 표시
+            const songInfoElement = document.getElementById('songInfo');
+            songInfoElement.textContent = `제목: ${randomSong.title}, 작품: ${randomSong.related_work}`;
+            songInfoElement.style.display = 'block'; // 정보 표시기 보이기
         }
 
         window.onload = function() {
