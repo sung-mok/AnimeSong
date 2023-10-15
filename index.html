@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -167,6 +167,7 @@ function loadSongs() {
         .then(response => response.json())
         .then(data => {
             songs = data.songs;
+            playRandomSong();
         })
         .catch(error => console.error('Error loading song data:', error));
 }
@@ -193,7 +194,7 @@ function togglePlaybackMode() {
     if (player && typeof player.playVideo === 'function' && typeof player.pauseVideo === 'function') {
         if (currentMode === '일시정지') {
             currentMode = '재생';
-            playRandomSong(); 
+            player.playVideo(); 
             document.getElementById('frameImage').src = 'tape.gif';
             document.getElementById('controlButton').src = '일시정지버튼.png';
         } else {
@@ -205,6 +206,7 @@ function togglePlaybackMode() {
         updateModeIndicator();
     }
 }
+
 
 function updateModeIndicator() {
     const indicator = document.getElementById('modeIndicator');
