@@ -294,6 +294,11 @@ function setPlayMode() {
 }
 
 function toggleAnimation() {
+    if (!player || typeof player.getPlayerState !== 'function') {
+        console.error("Player is not initialized or not ready yet.");
+        return;
+    }
+
     if (player.getPlayerState() == YT.PlayerState.PLAYING) {
         setPauseMode();
         player.pauseVideo();
@@ -302,6 +307,7 @@ function toggleAnimation() {
         player.playVideo();
     }
 }
+
 
 
 function checkAnswer() {
