@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>페이즈 트랜지션</title>
+    <title>페이즈 트랜지션1</title>
     <style>
         body, html {
             height: 100%;
@@ -84,6 +84,22 @@
             border-radius: 5px;
             font-weight: bold;
         }
+
+
+        .progress-container {
+            width: 70%;
+            height: 5px;
+            background: #eee;
+            margin: 15px 0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%; /* 초기 상태 */
+            background: #3498db;
+        }
     </style>
 </head>
 
@@ -97,6 +113,9 @@
     <div class="phase phase2">
         <div class="mode-indicator" id="modeIndicator"></div>
         <img class="frame" src="frame_0.png" alt="Frame Image" id="frameImage">
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
         <img class="play-button" src="재생버튼.png" alt="Play Button" id="controlButton">
     </div>
 
@@ -106,6 +125,9 @@
 
         const frameImage = document.getElementById('frameImage');
          const controlButton = document.getElementById('controlButton');
+         const progressBar = document.getElementById('progressBar');
+
+         progressBar.style.width = '50%';
 
          function togglePlaybackMode() {
              if (currentMode === '일시정지') {
