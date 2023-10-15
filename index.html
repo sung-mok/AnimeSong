@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -174,7 +174,7 @@ function hideLoading() {
 }
 
 function loadSongs() {
-    fetch('./Song.json')
+    fetch('Song.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -183,10 +183,11 @@ function loadSongs() {
         })
         .then(data => {
             songs = data.songs;
+            console.log(songs);  // 여기에 로그를 추가하여 곡 데이터를 확인합니다.
             if (currentMode === '재생' && songs.length > 0) { 
                 playRandomSong();
             }
-            moveToNextPhase();  // 로딩 후 다음 페이즈로 이동
+            moveToNextPhase(); 
         })
         .catch(error => {
             console.error('Error loading song data:', error);
