@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습5</title>
     <style>
         body, html {
             height: 100%;
@@ -138,20 +138,31 @@
         <img class="play-button" src="재생버튼.png" alt="Play Button" id="controlButton">
     </div>
 
-     <script>
+    <script>
+        let currentPhase = 'phase0';
+        let currentMode = '일시정지';
+
+        let player;
+        let songs = [];
+
+        function loadSongs() {
+            fetch('./Song.json')
+                .then(response => response.json())
+                .then(data => {
+                    songs = data;
+                    playRandomSong();  // 곡 목록 로딩 후 랜덤한 곡 재생
+                }); 
         let currentPhase = 'phase0';
         let currentMode = '일시정지';
         let player;
         let songs = [];
 
+        // 유튜브 API 준비 완료 시 호출되는 함수
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtubePlayer', {
                 height: '0',
                 width: '0',
                 videoId: '',
-                playerVars: {
-                    'origin': window.location.href // 현재 페이지의 도메인을 origin으로 설정합니다.
-                },
                 events: {
                     'onReady': onPlayerReady
                 }
@@ -159,28 +170,16 @@
         }
 
         function onPlayerReady(event) {
-    player = new YT.Player('youtubePlayer', {
-        height: '0',
-        width: '0',
-        videoId: '',
-        events: {
-            'onReady': onPlayerReady
+            // 곡 목록을 로드합니다.
+            loadSongs();
         }
-    });
-    loadSongs();
-}
-
 
         function loadSongs() {
             fetch('Song.json')
                 .then(response => response.json())
                 .then(data => {
                     songs = data.songs;
-                    if (currentMode === '재생') {
-                        playRandomSong();
-                    }
-                })
-                .catch(error => console.error('Error loading song data:', error));
+                });
         }
 
         function playRandomSong() {
@@ -202,41 +201,32 @@
         }
 
         function togglePlaybackMode() {
-    if (player && typeof player.getCurrentTime === 'function' && typeof player.pauseVideo === 'function') {
-        if (currentMode === '일시정지' && player.getCurrentTime()) { 
-            currentMode = '재생';
-            player.playVideo(); 
-            document.getElementById('frameImage').src = 'tape.gif';
-            document.getElementById('controlButton').src = '일시정지버튼.png';
-        } else {
-            currentMode = '일시정지';
-            player.pauseVideo(); 
-            document.getElementById('frameImage').src = 'frame_0.png';
-            document.getElementById('controlButton').src = '재생버튼.png';
+            if (currentMode === '일시정지') {
+                currentMode = '재생';
+                playRandomSong();
+                document.getElementById('frameImage').src = 'tape.gif';
+                document.getElementById('controlButton').src = '일시정지버튼.png';
+            } else {
+                currentMode = '일시정지';
+                player.pauseVideo();
+                document.getElementById('frameImage').src = 'frame_0.png';
+                document.getElementById('controlButton').src = '재생버튼.png';
+            }
+            updateModeIndicator();
         }
-        updateModeIndicator();
-    }
-}
-
 
         function updateModeIndicator() {
             const indicator = document.getElementById('modeIndicator');
             indicator.textContent = `모드: ${currentMode}`;
         }
 
-     function moveToNextPhase() {
-    const currentElement = document.querySelector(`.${currentPhase}`);
-    currentElement.classList.add('slide-out');
-    currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
-    const nextElement = document.querySelector(`.${currentPhase}`);
-    nextElement.style.transform = 'translateX(0%)';
-    
-    if (player && typeof player.pauseVideo === 'function') {
-        player.pauseVideo();
-    }
-}
-
-
+        function moveToNextPhase() {
+            const currentElement = document.querySelector(`.${currentPhase}`);
+            currentElement.classList.add('slide-out');
+            currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
+            const nextElement = document.querySelector(`.${currentPhase}`);
+            nextElement.style.transform = 'translateX(0%)';
+        }
 
         function preloadAssets() {
             const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
@@ -263,7 +253,6 @@
             preloadAssets();
         };
     </script>
-
 </body>
 
 </html>
