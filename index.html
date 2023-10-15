@@ -40,16 +40,20 @@
         }
 
         #phase2 img {
-            width: 25%;
+            width: 20%;
+        }
+
+        .play-icon, .pause-icon {
+            margin-top: -10px;  /* 테이프 이미지와의 거리를 줄입니다. */
         }
 
         .progress-bar {
-            width: 50%;
-            height: 10px;
-            background-color: #DDD;
-            position: relative;
-            margin-top: 20px;
-        }
+          width: 40%;  /* 프로그레스바의 길이를 40%로 조절 */
+          height: 10px;
+          background-color: #DDD;
+          position: relative;
+          margin-top: 20px;
+       }
 
         .progress-bar-inner {
             width: 0;
@@ -58,6 +62,14 @@
             position: absolute;
             left: 0;
             top: 0;
+        }
+
+        #inputText {
+          width: 40%;  /* 프로그레스바와 동일한 너비로 설정 */
+          padding: 5px;  /* 텍스트창 내부의 패딩 */
+          margin-top: 10px;  /* 프로그레스바와 텍스트창 사이의 간격 */
+          border: 1px solid #DDD;  /* 테두리 스타일 */
+          border-radius: 5px;  /* 테두리 둥글게 */
         }
 
     </style>
@@ -174,6 +186,7 @@
         <div class="progress-bar">
             <div class="progress-bar-inner"></div>
         </div>
+        <input type="text" id="inputText" placeholder="여기에 텍스트를 입력하세요...">
     </div>
 
     <!-- YouTube 플레이어 (화면에 보이지 않도록 설정) -->
