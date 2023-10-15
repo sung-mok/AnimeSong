@@ -199,6 +199,19 @@ function loadAndPlayRandomSongFromJSON() {
 }
 
 
+
+function switchPhase(event) {
+    const phase1 = document.getElementById('phase1');
+    const phase2 = document.getElementById('phase2');
+    phase1.style.transform = 'translateX(-100%)';
+    phase2.style.transform = 'translateX(0)';
+
+    currentPhase = 'phase2';
+    initializePhase(currentPhase);
+}
+
+
+
 function displaySongInfo(song) {
     const currentSongTitle = document.getElementById('currentSongTitle');
     const currentSongRelatedWork = document.getElementById('currentSongRelatedWork');
@@ -333,6 +346,7 @@ window.onload = function() {
     </div>
     <div class="phase" id="phase1">
         <img src="signpost.png" alt="푯말 이미지" onclick="switchPhase(event)">
+
     </div>
     <div class="phase" id="phase2">
         <div id="songInfo" style="position: absolute; top: 10px; left: 10px;">
