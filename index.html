@@ -67,15 +67,11 @@
 
     <script>
         let player;
-        let currentFrame = 0;
-        const totalFrames = 35;
-        let animationInterval;
         let isAnimating = false;
 
-
         function updateStatusText() {
-          const statusText = document.getElementById('statusText');
-          statusText.textContent = isAnimating ? '재생' : '일시정지';
+            const statusText = document.getElementById('statusText');
+            statusText.textContent = isAnimating ? '재생' : '일시정지';
         }
 
         function onYouTubeIframeAPIReady() {
@@ -99,71 +95,42 @@
         }
 
         function switchPhase(event) {
-          const img = event.target;
-          const rect = img.getBoundingClientRect();
+            const phase1 = document.getElementById('phase1');
+            const phase2 = document.getElementById('phase2');
+            phase1.style.transform = 'translateX(-100%)';
+            phase2.style.transform = 'translateX(0)';
 
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-
-          const minX = 132;
-          const minY = 148;
-          const maxX = 388;
-          const maxY = 232;
-
-          if (x >= minX && x <= maxX && y >= minY && y <= maxY) {
-              const phase1 = document.getElementById('phase1');
-              const phase2 = document.getElementById('phase2');
-              phase1.style.transform = 'translateX(-100%)';
-              phase2.style.transform = 'translateX(0)';
-
-              // 페이즈2로 넘어갈 때 기본 상태를 정지 상태로 설정
-              const playIcon = document.querySelector('.play-icon');
-              const pauseIcon = document.querySelector('.pause-icon');
-              clearInterval(animationInterval);
-              player.pauseVideo();
-              playIcon.style.display = 'block';
-              pauseIcon.style.display = 'none';
-              isAnimating = false;
-          }
-      }
-     function animateTape() {
-        const tapeImage = document.getElementById('tapeImage');
-        if (currentFrame > totalFrames) {
-            currentFrame = 0;
-        }
-        tapeImage.src = `tape_frame/frame_${currentFrame}.png`;
-        currentFrame++;
-    
-        if (isAnimating) {
-            requestAnimationFrame(animateTape);
-        }
-    }
-    
-    function toggleAnimation() {
-        const playIcon = document.querySelector('.play-icon');
-        const pauseIcon = document.querySelector('.pause-icon');
-    
-        if (isAnimating) {
+            const playIcon = document.querySelector('.play-icon');
+            const pauseIcon = document.querySelector('.pause-icon');
             player.pauseVideo();
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
-        } else {
-            requestAnimationFrame(animateTape);
-            player.playVideo();
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
+            isAnimating = false;
         }
-        isAnimating = !isAnimating;
-    
-        updateStatusText();
-    }
 
-      function onPlayerReady(event) {
-          // 아무것도 하지 않도록 변경 (이전에는 자동재생을 막는 코드가 있었음)
-      }
+        function toggleAnimation() {
+            const tapeImage = document.getElementById('tapeImage');
+            const playIcon = document.querySelector('.play-icon');
+            const pauseIcon = document.querySelector('.pause-icon');
+
+            if (isAnimating) {
+                tapeImage.src = "tape_frame/frame_0.png"; // 애니메이션을 멈출 때 정적 이미지로 변경
+                player.pauseVideo();
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            } else {
+                tapeImage.src = "tape.gif"; // 애니메이션을 시작할 때 GIF로 변경
+                player.playVideo();
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            }
+            isAnimating = !isAnimating;
+
+            updateStatusText();
+        }
+
 
     </script>
-
 </head>
 <body>
     <div class="phase" id="phase1">
@@ -171,9 +138,11 @@
     </div>
     <div class="phase" id="phase2">
         <div id="statusText" style="position: absolute; top: 10px; left: 10px;">일시정지</div>
+        <!-- phase2의 tapeImage의 초기 src 값을 정적 이미지로 설정 -->
         <img src="tape_frame/frame_0.png" alt="테이프 이미지" id="tapeImage" onclick="toggleAnimation()">
+
         <img src="재생버튼.png" alt="재생 버튼" class="play-icon" onclick="toggleAnimation()">
-        <img src="일시정지버튼.png" alt="일시정지 버튼" class="pause-icon" onclick="toggleAnimation()">
+        <img src="일시정지버튼.png" alt="일시정지 버튼" class="pause-icon" style="display: none;" onclick="toggleAnimation()">
         <div class="progress-bar">
             <div class="progress-bar-inner"></div>
         </div>
