@@ -113,18 +113,29 @@
         }
 
 
-                // JSON 파일에서 노래 정보를 가져와서 랜덤하게 노래 선택 후 재생
-        function loadAndPlayRandomSongFromJSON() {
-            fetch('Song.json')  // JSON 파일의 경로 (예: 'songs.json')
-                .then(response => response.json())
-                .then(data => {
-                    const songs = data.songs;
-                    const randomIndex = Math.floor(Math.random() * songs.length);
-                    const song = songs[randomIndex];
-                    player.loadVideoById({videoId: extractVideoID(song.youtube_link)});
-                })
-                .catch(error => console.error('Error loading song data:', error));
-        }
+              function loadAndPlayRandomSongFromJSON() {
+                fetch('songs.json')  // JSON 파일의 경로 (예: 'songs.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        const songs = data.songs;
+                        const randomIndex = Math.floor(Math.random() * songs.length);
+                        const song = songs[randomIndex];
+                        player.loadVideoById({videoId: extractVideoID(song.youtube_link)});
+                        
+                        // 화면에 노래 정보 표시
+                        displaySongInfo(song);
+                    })
+                    .catch(error => console.error('Error loading song data:', error));
+            }
+
+            // 화면에 노래 정보를 표시하는 함수
+            function displaySongInfo(song) {
+                const currentSongTitle = document.getElementById('currentSongTitle');
+                const currentSongRelatedWork = document.getElementById('currentSongRelatedWork');
+                
+                currentSongTitle.textContent = ` - ${song.title}`;
+                currentSongRelatedWork.textContent = ` - ${song.related_work}`;
+            }
         
         // YouTube 링크에서 videoId 추출
         function extractVideoID(url) {
@@ -213,6 +224,12 @@
             <div class="progress-bar-inner"></div>
         </div>
         <input type="text" id="inputText" placeholder="여기에 텍스트를 입력하세요...">
+        <div id="songInfo" style="position: absolute; top: 10px; left: 10px;">
+            <span id="statusText">일시정지</span>
+            <span id="currentSongTitle"> - 노래 제목</span>
+            <span id="currentSongRelatedWork"> - 관련 작품</span>
+</div>
+
     </div>
 
     <!-- YouTube 플레이어 (화면에 보이지 않도록 설정) -->
