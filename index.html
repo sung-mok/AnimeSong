@@ -1,9 +1,24 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Song Quiz</title>
+    <style>
+        .phase {
+            width: 100%;
             height: 100%;
             background-color: #007BFF;
             position: absolute;
             left: 0;
             top: 0;
+            transform: translateX(-100%);
+        }
+
+        #loadingPhase {
+            background-color: #f5f5f5;
+            transform: translateX(0);
         }
 
         #inputText {
@@ -13,18 +28,45 @@
             border: 1px solid #DDD;
             border-radius: 5px;
         }
-
-        /* 기존의 .phase 스타일 아래에 추가합니다. */
-        #loadingPhase {
-            background-color: #f5f5f5; /* 예: 회색 배경 */
-            transform: translateX(0);
-        }
     </style>
+</head>
+<body>
+    <div class="phase" id="loadingPhase">
+        <div>Loading...</div>
+    </div>
+    <div class="phase" id="phase1">
+        <img src="signpost.png" alt="푯말 이미지" onclick="switchPhase(event)">
+    </div>
+    <div class="phase" id="phase2">
+        <div id="songInfo" style="position: absolute; top: 10px; left: 10px;">
+            <span id="statusText">일시정지</span>
+            <span id="currentSongTitle"> - 노래 제목</span>
+            <span id="currentSongRelatedWork"> - 관련 작품</span>
+        </div>
+        <img src="tape_frame/frame_0.png" alt="테이프 이미지" id="tapeImage" onclick="toggleAnimation()">
+        <img src="재생버튼.png" alt="재생 버튼" class="play-icon" onclick="toggleAnimation()">
+        <img src="일시정지버튼.png" alt="일시정지 버튼" class="pause-icon" style="display: none;" onclick="toggleAnimation()">
+        <div class="progress-bar">
+            <div class="progress-bar-inner"></div>
+        </div>
+        <input type="text" id="inputText" placeholder="여기에 텍스트를 입력하세요...">
+        <button id="submitAnswer">답 제출</button>
+        <div id="answerResult" style="position: absolute; top: 10px; right: 10px;"></div>
+    </div>
+    <div id="player" style="display:none;"></div>
 
+
+
+
+
+
+
+
+            
     <!-- YouTube API 스크립트 -->
     <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
- let player;
+<script>
+let player;
 let currentPhase = 'loadingPhase';  // 현재 화면의 상태를 나타내는 전역 변수
 let isAnimating = false;
 
@@ -205,7 +247,6 @@ function switchPhase(event) {
     updateStatusText();
 }
 
-
 function toggleAnimation() {
     const tapeImage = document.getElementById('tapeImage');
     const playIcon = document.querySelector('.play-icon');
@@ -232,81 +273,49 @@ function toggleAnimation() {
     updateStatusText();
 }
 
+function checkAnswer() {
+    const inputText = document.getElementById('inputText').value;
+    const answerResult = document.getElementById('answerResult');
 
-      function checkAnswer() {
-            const inputText = document.getElementById('inputText').value;
-            const answerResult = document.getElementById('answerResult');
-        
-            fetch('Song.json')
-                .then(response => response.json())
-                .then(data => {
-                    const songs = data.songs;
-                    const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
-        
-                    if (currentSong) {
-                        if (inputText === currentSong.answer) {
-                            answerResult.textContent = "정답!";
-                        } else {
-                            answerResult.textContent = "실패!";
-                        }
-        
-                        // 1. 노래 멈추기
-                        player.stopVideo();
-        
-                        // 2. 다음 노래 재생
-                        loadAndPlayRandomSongFromJSON();
-        
-                        // 3. 텍스트 박스 비우기
-                        document.getElementById('inputText').value = '';
-        
-                        // 4. "정답" 또는 "실패" 메시지는 2초 후에 사라지게 합니다.
-                        setTimeout(() => {
-                            answerResult.textContent = "";
-                        }, 2000);
-                    }
-                });
-        }
+    fetch('Song.json')
+        .then(response => response.json())
+        .then(data => {
+            const songs = data.songs;
+            const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
 
+            if (currentSong) {
+                if (inputText === currentSong.answer) {
+                    answerResult.textContent = "정답!";
+                } else {
+                    answerResult.textContent = "실패!";
+                }
+
+                // 1. 노래 멈추기
+                player.stopVideo();
+
+                // 2. 다음 노래 재생
+                loadAndPlayRandomSongFromJSON();
+
+                // 3. 텍스트 박스 비우기
+                document.getElementById('inputText').value = '';
+
+                // 4. "정답" 또는 "실패" 메시지는 2초 후에 사라지게 합니다.
+                setTimeout(() => {
+                    answerResult.textContent = "";
+                }, 2000);
+            }
+        });
+}
 
 const inputText = document.getElementById('inputText');
 inputText.addEventListener('keydown', function(event) {
     // 엔터키의 keyCode는 13입니다.
     if (event.keyCode === 13) {
         event.preventDefault();  // 기본 엔터키 동작을 막습니다.
-        submitAnswer();  // 답을 제출하는 함수를 호출합니다.
+        checkAnswer();  // 답을 제출하는 함수를 호출합니다.
     }
 });
-
-
 </script>
 
-
-    
-</head>
-<body>
-    <!-- 로딩 화면 -->
-    <div class="phase" id="loadingPhase">
-        <div>Loading...</div>  <!-- 실제 프로젝트에서는 애니메이션 GIF나 로딩 인디케이터를 사용할 수 있습니다. -->
-    </div>
-    <div class="phase" id="phase1">
-        <img src="signpost.png" alt="푯말 이미지" onclick="switchPhase(event)">
-    </div>
-    <div class="phase" id="phase2">
-        <div id="songInfo" style="position: absolute; top: 10px; left: 10px;">
-            <span id="statusText">일시정지</span>
-            <span id="currentSongTitle"> - 노래 제목</span>
-            <span id="currentSongRelatedWork"> - 관련 작품</span>
-        </div>
-        <img src="tape_frame/frame_0.png" alt="테이프 이미지" id="tapeImage" onclick="toggleAnimation()">
-        <img src="재생버튼.png" alt="재생 버튼" class="play-icon" onclick="toggleAnimation()">
-        <img src="일시정지버튼.png" alt="일시정지 버튼" class="pause-icon" style="display: none;" onclick="toggleAnimation()">
-        <div class="progress-bar">
-            <div class="progress-bar-inner"></div>
-        </div>
-        <input type="text" id="inputText" placeholder="여기에 텍스트를 입력하세요...">
-        <button id="submitAnswer">답 제출</button> <!-- 추가된 버튼 -->
-        <div id="answerResult" style="position: absolute; top: 10px; right: 10px;"></div> <!-- 정답 여부를 표시할 요소 -->
-    </div>
-    <div id="player" style="display:none;"></div>
 </body>
 </html>
