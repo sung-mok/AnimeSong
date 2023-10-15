@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습2</title>
+    <title>재생연습3</title>
     <style>
         body, html {
             height: 100%;
@@ -166,15 +166,44 @@ function onPlayerReady(event) {
     progressBarUpdateInterval = setInterval(updateProgressBar, 1000);
 }
 
+
+function showLoading() {
+    document.querySelector('.phase0').style.display = 'flex';
+}
+
+function hideLoading() {
+    document.querySelector('.phase0').style.display = 'none';
+}
+
 function loadSongs() {
+    showLoading(); // 로딩 화면 표시 시작
     fetch('Song.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
         .then(data => {
             songs = data.songs;
-            playRandomSong();
+            if (currentMode === '재생') {
+                playRandomSong();
+            }
+            hideLoading(); // 로딩 화면 숨김
         })
-        .catch(error => console.error('Error loading song data:', error));
+        .catch(error => {
+            console.error('Error loading song data:', error);
+            alert('곡 목록을 로드하는데 문제가 발생했습니다. 나중에 다시 시도해주세요.');
+            hideLoading(); // 로딩 화면 숨김
+        });
 }
+
+
+
+
+
+
+
 
 function playRandomSong() {
     const randomIndex = Math.floor(Math.random() * songs.length);
