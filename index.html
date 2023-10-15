@@ -76,116 +76,133 @@
     <!-- YouTube API 스크립트 -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player;
-        let isAnimating = false;
-        let videoDuration = 0;
+      let player;
+let isAnimating = false;
 
-        function updateStatusText() {
-            const statusText = document.getElementById('statusText');
-            statusText.textContent = isAnimating ? '재생' : '일시정지';
+function updateStatusText() {
+    const statusText = document.getElementById('statusText');
+    statusText.textContent = isAnimating ? '재생' : '일시정지';
+}
+
+let videoDuration = 0;
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        playerVars: {
+            'autoplay': 0,
+            'controls': 0,
+            'showinfo': 0,
+            'modestbranding': 1,
+            'loop': 1,
+            'playlist': 'qR6dzwQahOM',
+            'fs': 0,
+            'cc_load_policy': 0,
+            'iv_load_policy': 3,
+            'autohide': 0
+        },
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
         }
+    });
+}
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0',
-                width: '0',
-                videoId: '',
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'showinfo': 0,
-                    'modestbranding': 1,
-                    'loop': 1,
-                    'playlist': 'qR6dzwQahOM',
-                    'fs': 0,
-                    'cc_load_policy': 0,
-                    'iv_load_policy': 3,
-                    'autohide': 0
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            loadAndPlayRandomSongFromJSON();
-            videoDuration = player.getDuration();
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
-                updateProgressBar();
+function loadAndPlayRandomSongFromJSON() {
+    fetch('Song.json')  // JSON 파일의 경로 수정
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        }
+            return response.json();
+        })
+        .then(data => {
+            const songs = data.songs;
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            const song = songs[randomIndex];
+            player.loadVideoById({videoId: extractVideoID(song.youtube_link)});
+            
+            // 화면에 노래 정보 표시
+            displaySongInfo(song);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error.message);
+        });
+}
 
-        function updateProgressBar() {
-            const progressBarInner = document.querySelector('.progress-bar-inner');
-            const currentTime = player.getCurrentTime();
-            const percentage = (currentTime / videoDuration) * 100;
-            progressBarInner.style.width = percentage + '%';
-            if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-                setTimeout(updateProgressBar, 500);
-            }
-        }
+function displaySongInfo(song) {
+    const currentSongTitle = document.getElementById('currentSongTitle');
+    const currentSongRelatedWork = document.getElementById('currentSongRelatedWork');
+    
+    currentSongTitle.textContent = ` - ${song.title}`;
+    currentSongRelatedWork.textContent = ` - ${song.related_work}`;
+}
 
-        function loadAndPlayRandomSongFromJSON() {
-            fetch('Song.json')
-                .then(response => response.json())
-                .then(data => {
-                    const songs = data.songs;
-                    const randomIndex = Math.floor(Math.random() * songs.length);
-                    const song = songs[randomIndex];
-                    player.loadVideoById({ videoId: extractVideoID(song.youtube_link) });
-                    displaySongInfo(song);
-                })
-                .catch(error => console.error('Error loading song data:', error));
-        }
+function extractVideoID(url) {
+    const videoId = url.split("v=")[1].substring(0, 11);
+    return videoId;
+}
 
-        function displaySongInfo(song) {
-            const currentSongTitle = document.getElementById('currentSongTitle');
-            const currentSongRelatedWork = document.getElementById('currentSongRelatedWork');
-            currentSongTitle.textContent = `노래: ${song.title}`;
-            currentSongRelatedWork.textContent = `관련 작품: ${song.related_work}`;
-        }
+function onPlayerReady(event) {
+    loadAndPlayRandomSongFromJSON();  // 플레이어가 준비되면 JSON에서 노래 정보를 가져와 재생
+    videoDuration = player.getDuration();  // 영상의 전체 길이를 가져옵니다.
+}
 
-        function extractVideoID(url) {
-            const videoId = url.split("v=")[1].substring(0, 11);
-            return videoId;
-        }
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+        updateProgressBar();  // 영상이 재생되면 프로그레스바를 업데이트합니다.
+    }
+}
 
-        function switchPhase(event) {
-            const phase1 = document.getElementById('phase1');
-            const phase2 = document.getElementById('phase2');
-            phase1.style.transform = 'translateX(-100%)';
-            phase2.style.transform = 'translateX(0)';
-            const playIcon = document.querySelector('.play-icon');
-            const pauseIcon = document.querySelector('.pause-icon');
-            player.pauseVideo();
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            isAnimating = false;
-        }
+function updateProgressBar() {
+    const progressBarInner = document.querySelector('.progress-bar-inner');
+    const currentTime = player.getCurrentTime();  // 현재 재생 위치를 가져옵니다.
 
-        function toggleAnimation() {
-            const tapeImage = document.getElementById('tapeImage');
-            const playIcon = document.querySelector('.play-icon');
-            const pauseIcon = document.querySelector('.pause-icon');
-            if (isAnimating) {
-                tapeImage.src = "tape_frame/frame_0.png";
-                player.pauseVideo();
-                playIcon.style.display = 'block';
-                pauseIcon.style.display = 'none';
-            } else {
-                tapeImage.src = "tape.gif";
-                player.playVideo();
-                playIcon.style.display = 'none';
-                pauseIcon.style.display = 'block';
-            }
-            isAnimating = !isAnimating;
-            updateStatusText();
-        }
+    const percentage = (currentTime / videoDuration) * 100;  // 재생 위치의 백분율을 계산합니다.
+    progressBarInner.style.width = percentage + '%';  // 프로그레스바의 너비를 설정합니다.
+
+    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+        setTimeout(updateProgressBar, 500);  // 0.5초마다 프로그레스바를 업데이트합니다.
+    }
+}
+
+function switchPhase(event) {
+    const phase1 = document.getElementById('phase1');
+    const phase2 = document.getElementById('phase2');
+    phase1.style.transform = 'translateX(-100%)';
+    phase2.style.transform = 'translateX(0)';
+
+    const playIcon = document.querySelector('.play-icon');
+    const pauseIcon = document.querySelector('.pause-icon');
+    player.pauseVideo();
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    isAnimating = false;
+}
+
+function toggleAnimation() {
+    const tapeImage = document.getElementById('tapeImage');
+    const playIcon = document.querySelector('.play-icon');
+    const pauseIcon = document.querySelector('.pause-icon');
+
+    if (isAnimating) {
+        tapeImage.src = "tape_frame/frame_0.png"; // 애니메이션을 멈출 때 정적 이미지로 변경
+        player.pauseVideo();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+    } else {
+        tapeImage.src = "tape.gif"; // 애니메이션을 시작할 때 GIF로 변경
+        player.playVideo();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+    }
+    isAnimating = !isAnimating;
+
+    updateStatusText();
+}
+
     </script>
 </head>
 <body>
