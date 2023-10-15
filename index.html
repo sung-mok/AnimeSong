@@ -112,6 +112,32 @@
             });
         }
 
+
+                // JSON 파일에서 노래 정보를 가져와서 랜덤하게 노래 선택 후 재생
+        function loadAndPlayRandomSongFromJSON() {
+            fetch('songs.json')  // JSON 파일의 경로 (예: 'songs.json')
+                .then(response => response.json())
+                .then(data => {
+                    const songs = data.songs;
+                    const randomIndex = Math.floor(Math.random() * songs.length);
+                    const song = songs[randomIndex];
+                    player.loadVideoById({videoId: extractVideoID(song.youtube_link)});
+                })
+                .catch(error => console.error('Error loading song data:', error));
+        }
+        
+        // YouTube 링크에서 videoId 추출
+        function extractVideoID(url) {
+            const videoId = url.split("v=")[1].substring(0, 11);
+            return videoId;
+        }
+        
+        // 기존의 onPlayerReady 함수 수정:
+        function onPlayerReady(event) {
+            loadAndPlayRandomSongFromJSON();  // 플레이어가 준비되면 JSON에서 노래 정보를 가져와 재생
+        }
+
+
         function onPlayerReady(event) {
             videoDuration = player.getDuration();  // 영상의 전체 길이를 가져옵니다.
         }
