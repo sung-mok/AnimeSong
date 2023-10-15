@@ -87,9 +87,9 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
      let player;
-let currentPhase = 'loadingPhase';
-let isAnimating = false;
-let videoDuration = 0;
+    let currentPhase = 'loadingPhase';
+    let isAnimating = false;
+    let videoDuration = 0;
 
 function updateStatusText() {
     const statusText = document.getElementById('statusText');
@@ -293,20 +293,6 @@ function setPlayMode() {
     updateStatusText();
 }
 
-function toggleAnimation() {
-    if (!player || typeof player.getPlayerState !== 'function') {
-        console.error("Player is not initialized or not ready yet.");
-        return;
-    }
-
-    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-        setPauseMode();
-        player.pauseVideo();
-    } else {
-        setPlayMode();
-        player.playVideo();
-    }
-}
 
 
 
@@ -337,6 +323,24 @@ function checkAnswer() {
             }
         });
 }
+
+
+
+        function toggleAnimation() {
+    if (!player || typeof player.getPlayerState !== 'function') {
+        console.error("Player is not initialized or not ready yet.");
+        return;
+    }
+
+    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+        setPauseMode();
+        player.pauseVideo();
+    } else {
+        setPlayMode();
+        player.playVideo();
+    }
+}
+
 
 window.onload = function() {
     preloadResources();
