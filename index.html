@@ -86,73 +86,68 @@
     <!-- YouTube API 스크립트 -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player;
-        let currentPhase = 'loadingPhase';  // 현재 화면의 상태를 나타내는 전역 변수
-        let isAnimating = false;
+     let player;
+let currentPhase = 'loadingPhase';
+let isAnimating = false;
+let videoDuration = 0;
 
-        function updateStatusText() {
-            const statusText = document.getElementById('statusText');
-            statusText.textContent = isAnimating ? '재생' : '일시정지';
-        }
+function updateStatusText() {
+    const statusText = document.getElementById('statusText');
+    statusText.textContent = isAnimating ? '재생' : '일시정지';
+}
 
-        let videoDuration = 0;
+function preloadResources() {
+    const resources = [
+        'signpost.png',
+        'tape_frame/frame_0.png',
+        '재생버튼.png',
+        '일시정지버튼.png',
+        'tape.gif',
+        'Song.json'
+    ];
 
-        // 프리로딩 함수
-        function preloadResources() {
-            const resources = [
-                'signpost.png',
-                'tape_frame/frame_0.png',
-                '재생버튼.png',
-                '일시정지버튼.png',
-                'tape.gif',
-                'Song.json'
-            ];
-        
-            let loadedCount = 0;
-        
-            resources.forEach(resource => {
-                if (resource.endsWith('.json')) {
-                    fetch(resource)
-                        .then(response => {
-                            if (response.ok) {
-                                return response.json();
-                            }
-                            throw new Error(`Failed to load ${resource}`);
-                        })
-                        .then(() => {
-                            console.log(`Loaded: ${resource}`);
-                            loadedCount++;
-                            if (loadedCount === resources.length) {
-                                hideLoadingScreen();
-                            }
-                        })
-                        .catch(error => console.error('Error loading JSON:', error));
-                } else {
-                    const img = new Image();
-                    img.onload = () => {
-                        console.log(`Loaded: ${resource}`);
-                        loadedCount++;
-                        if (loadedCount === resources.length) {
-                            hideLoadingScreen();
-                        }
-                    };
-                    img.onerror = () => {
-                        console.error(`Failed to load image: ${resource}`);
-                    };
-                    img.src = resource;
+    let loadedCount = 0;
+
+    resources.forEach(resource => {
+        if (resource.endsWith('.json')) {
+            fetch(resource)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error(`Failed to load ${resource}`);
+                })
+                .then(() => {
+                    console.log(`Loaded: ${resource}`);
+                    loadedCount++;
+                    if (loadedCount === resources.length) {
+                        hideLoadingScreen();
+                    }
+                })
+                .catch(error => console.error('Error loading JSON:', error));
+        } else {
+            const img = new Image();
+            img.onload = () => {
+                console.log(`Loaded: ${resource}`);
+                loadedCount++;
+                if (loadedCount === resources.length) {
+                    hideLoadingScreen();
                 }
-            });
+            };
+            img.onerror = () => {
+                console.error(`Failed to load image: ${resource}`);
+            };
+            img.src = resource;
         }
+    });
+}
 
-// 로딩 화면 숨기기 함수
 function hideLoadingScreen() {
     const loadingPhase = document.getElementById('loadingPhase');
     const phase1 = document.getElementById('phase1');
 
     loadingPhase.style.transform = 'translateX(-100%)';
     phase1.style.transform = 'translateX(0)';
-
-    // 페이즈 업데이트
 
     currentPhase = 'phase1';
     initializePhase(currentPhase);
@@ -182,14 +177,6 @@ function initYouTubePlayer() {
     });
 }
 
-// 웹 페이지 로드 시 프리로딩 시작
-window.onload = function() {
-    preloadResources();
-    
-    const submitButton = document.getElementById('submitAnswer');
-    submitButton.addEventListener('click', checkAnswer);
-}
-
 function loadAndPlayRandomSongFromJSON() {
     fetch('Song.json')
         .then(response => {
@@ -204,7 +191,6 @@ function loadAndPlayRandomSongFromJSON() {
             const song = songs[randomIndex];
             player.loadVideoById({videoId: extractVideoID(song.youtube_link)});
             
-            // 화면에 노래 정보 표시
             displaySongInfo(song);
         })
         .catch(error => {
@@ -248,7 +234,6 @@ function updateProgressBar() {
     }
 }
 
-
 function initializePhase(phase) {
     switch(phase) {
         case 'loadingPhase':
@@ -259,96 +244,79 @@ function initializePhase(phase) {
             break;
         case 'phase2':
             // phase2 초기화 작업
-            const playIcon = document.querySelector('.play-icon');
-            const pauseIcon = document.querySelector('.pause-icon');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            isAnimating = false;
-            updateStatusText();
+            setPauseMode();
             break;
     }
 }
 
-
-function switchPhase(event) {
-    const phase1 = document.getElementById('phase1');
-    const phase2 = document.getElementById('phase2');
-    phase1.style.transform = 'translateX(-100%)';
-    phase2.style.transform = 'translateX(0)';
-
-    currentPhase = 'phase2';
-    initializePhase(currentPhase);
-
-    loadAndPlayRandomSongFromJSON();
-}
-
-
-function toggleAnimation() {
-    const tapeImage = document.getElementById('tapeImage');
+function setPauseMode() {
     const playIcon = document.querySelector('.play-icon');
     const pauseIcon = document.querySelector('.pause-icon');
-
-    if (isAnimating) {
-        tapeImage.src = "tape_frame/frame_0.png"; 
-        player.pauseVideo();
-        playIcon.style.display = 'block';
-        pauseIcon.style.display = 'none';
-    } else {
-        tapeImage.src = "tape.gif"; 
-        player.playVideo();
-        playIcon.style.display = 'none';
-        pauseIcon.style.display = 'block';
-    }
-
-    // 현재 페이즈가 phase2가 아니면 비디오 중지
-    if (currentPhase !== 'phase2') {
-        player.stopVideo();
-    }
-
-    isAnimating = !isAnimating;
+    const tapeImage = document.getElementById('tapeImage');
+    
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    tapeImage.src = "tape_frame/frame_0.png"; 
+    isAnimating = false;
     updateStatusText();
 }
 
-
-      function checkAnswer() {
-            const inputText = document.getElementById('inputText').value;
-            const answerResult = document.getElementById('answerResult');
-        
-            fetch('Song.json')
-                .then(response => response.json())
-                .then(data => {
-                    const songs = data.songs;
-                    const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
-        
-                    if (currentSong) {
-                        if (inputText === currentSong.answer) {
-                            answerResult.textContent = "정답!";
-                        } else {
-                            answerResult.textContent = "실패!";
-                        }
-        
-                        // 1. 노래 멈추기
-                        player.stopVideo();
-        
-                        // 2. 다음 노래 재생
-                        loadAndPlayRandomSongFromJSON();
-        
-                        // 3. 텍스트 박스 비우기
-                        document.getElementById('inputText').value = '';
-        
-                        // 4. "정답" 또는 "실패" 메시지는 2초 후에 사라지게 합니다.
-                        setTimeout(() => {
-                            answerResult.textContent = "";
-                        }, 2000);
-                    }
-                });
-        }
-
-
-        window.onload = function() {
-            preloadResources();
-            initializePhase(currentPhase);
+function setPlayMode() {
+    const playIcon = document.querySelector('.play-icon');
+    const pauseIcon = document.querySelector('.pause-icon');
+    const tapeImage = document.getElementById('tapeImage');
+    
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = 'block';
+    tapeImage.src = "tape.gif"; 
+    isAnimating = true;
+    loadAndPlayRandomSongFromJSON();
+    updateStatusText();
 }
+
+function toggleAnimation() {
+    if (isAnimating) {
+        setPauseMode();
+        player.pauseVideo();
+    } else {
+        setPlayMode();
+        player.playVideo();
+    }
+}
+
+function checkAnswer() {
+    const inputText = document.getElementById('inputText').value;
+    const answerResult = document.getElementById('answerResult');
+
+    fetch('Song.json')
+        .then(response => response.json())
+        .then(data => {
+            const songs = data.songs;
+            const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
+
+            if (currentSong) {
+                if (inputText === currentSong.answer) {
+                    answerResult.textContent = "정답!";
+                } else {
+                    answerResult.textContent = "실패!";
+                }
+
+                player.stopVideo();
+                loadAndPlayRandomSongFromJSON();
+                document.getElementById('inputText').value = '';
+
+                setTimeout(() => {
+                    answerResult.textContent = "";
+                }, 2000);
+            }
+        });
+}
+
+window.onload = function() {
+    preloadResources();
+    initializePhase(currentPhase);
+}
+
 
 
 </script>
