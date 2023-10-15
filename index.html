@@ -1,66 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>웹 사이트</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
 
-        .phase {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: transform 1s;
-        }
-
-        #loadingPhase {
-            transform: translateX(0);
-        }
-
-        #phase1 {
-            transform: translateX(100%);
-        }
-
-        #phase2 {
-            transform: translateX(200%);
-        }
-
-        .phase img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        #phase2 img {
-            width: 20%;
-        }
-
-        .play-icon, .pause-icon {
-            margin-top: -10px;
-        }
-
-        .progress-bar {
-            width: 40%;
-            height: 10px;
-            background-color: #DDD;
-            position: relative;
-            margin-top: 20px;
-        }
-
-        .progress-bar-inner {
-            width: 0;
             height: 100%;
             background-color: #007BFF;
             position: absolute;
@@ -328,9 +266,6 @@ function toggleAnimation() {
                     }
                 });
         }
-
-
-
 
 
 </script>
