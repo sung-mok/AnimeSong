@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습4</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -161,10 +161,8 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady(event) {
     loadSongs();
-    
-    // 1초마다 프로그래스 바 업데이트
-    progressBarUpdateInterval = setInterval(updateProgressBar, 1000);
 }
+
 
 
 function showLoading() {
@@ -176,7 +174,6 @@ function hideLoading() {
 }
 
 function loadSongs() {
-    showLoading(); 
     fetch('Song.json')
         .then(response => {
             if (!response.ok) {
@@ -189,14 +186,14 @@ function loadSongs() {
             if (currentMode === '재생' && songs.length > 0) { 
                 playRandomSong();
             }
-            hideLoading();
+            moveToNextPhase();  // 로딩 후 다음 페이즈로 이동
         })
         .catch(error => {
             console.error('Error loading song data:', error);
             alert('곡 목록을 로드하는데 문제가 발생했습니다. 나중에 다시 시도해주세요.');
-            hideLoading();
         });
 }
+
 
 
 
