@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transition Example</title>
+    <style>
+        .container {
+            position: relative;
+            width: 300px;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .phase {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            line-height: 100px;
+            text-align: center;
+            font-size: 24px;
+            transition: all 0.5s;
+        }
+
+        #phase1 {
+            background-color: #e74c3c;
+            z-index: 2;
+        }
+
+        #phase2 {
+            background-color: #3498db;
+            left: 100%; /* 초기에 화면 밖에 위치시킵니다. */
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="phase" id="phase1">Phase 1</div>
+    <div class="phase" id="phase2">Phase 2</div>
+</div>
+
+<script>
+    document.getElementById('phase1').addEventListener('click', function() {
+        this.style.left = '-100%'; // phase1을 왼쪽으로 이동
+        document.getElementById('phase2').style.left = '0'; // phase2를 화면 안으로 이동
+    });
+</script>
+
+</body>
+</html>
