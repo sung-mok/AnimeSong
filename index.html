@@ -236,7 +236,7 @@ function onPlayerReady(event) {
 
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.PLAYING) {
-        displayCurrentSongInfo();
+        
         updateProgressBar();
     }
 }
@@ -252,6 +252,17 @@ function updateProgressBar() {
         setTimeout(updateProgressBar, 500);
     }
 }
+
+
+
+function displaySongInfo(song) {
+    const currentSongTitle = document.getElementById('currentSongTitle');
+    const currentSongRelatedWork = document.getElementById('currentSongRelatedWork');
+    
+    currentSongTitle.textContent = ` - ${song.title}`;
+    currentSongRelatedWork.textContent = ` - ${song.related_work}`;
+}
+
 
 function initializePhase(phase) {
     switch(phase) {
