@@ -191,12 +191,13 @@ function loadAndPlayRandomSongFromJSON() {
             const song = songs[randomIndex];
             player.loadVideoById({videoId: extractVideoID(song.youtube_link)});
             
-            displaySongInfo(song);
+            displaySongInfo(song);  // 이 부분을 확인해 주세요
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error.message);
         });
 }
+
 
 function displaySongInfo(song) {
     const currentSongTitle = document.getElementById('currentSongTitle');
@@ -275,7 +276,7 @@ function setPlayMode() {
 }
 
 function toggleAnimation() {
-    if (isAnimating) {
+    if (player.getPlayerState() == YT.PlayerState.PLAYING) {
         setPauseMode();
         player.pauseVideo();
     } else {
@@ -283,6 +284,7 @@ function toggleAnimation() {
         player.playVideo();
     }
 }
+
 
 function checkAnswer() {
     const inputText = document.getElementById('inputText').value;
