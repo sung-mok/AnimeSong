@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습4</title>
+    <title>재생연습5</title>
     <style>
         body, html {
             height: 100%;
@@ -159,8 +159,17 @@
         }
 
         function onPlayerReady(event) {
-            loadSongs();
+    player = new YT.Player('youtubePlayer', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        events: {
+            'onReady': onPlayerReady
         }
+    });
+    loadSongs();
+}
+
 
         function loadSongs() {
             fetch('Song.json')
