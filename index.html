@@ -115,7 +115,7 @@
 
                 // JSON 파일에서 노래 정보를 가져와서 랜덤하게 노래 선택 후 재생
         function loadAndPlayRandomSongFromJSON() {
-            fetch('songs.json')  // JSON 파일의 경로 (예: 'songs.json')
+            fetch('Song.json')  // JSON 파일의 경로 (예: 'songs.json')
                 .then(response => response.json())
                 .then(data => {
                     const songs = data.songs;
