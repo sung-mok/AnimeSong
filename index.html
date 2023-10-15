@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -130,7 +130,7 @@
         let songs = [];
 
         function loadSongs() {
-            fetch('/mnt/data/Song.json')
+            fetch('Song.json')
                 .then(response => response.json())
                 .then(data => {
                     songs = data;
