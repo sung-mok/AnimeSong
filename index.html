@@ -212,12 +212,16 @@ function switchPhase(event) {
 
 
 
-function displaySongInfo(song) {
-    const currentSongTitle = document.getElementById('currentSongTitle');
-    const currentSongRelatedWork = document.getElementById('currentSongRelatedWork');
-    
-    currentSongTitle.textContent = ` - ${song.title}`;
-    currentSongRelatedWork.textContent = ` - ${song.related_work}`;
+function displayCurrentSongInfo() {
+    fetch('Song.json')
+        .then(response => response.json())
+        .then(data => {
+            const songs = data.songs;
+            const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
+            if (currentSong) {
+                displaySongInfo(currentSong);
+            }
+        });
 }
 
 function extractVideoID(url) {
@@ -232,6 +236,7 @@ function onPlayerReady(event) {
 
 function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.PLAYING) {
+        displayCurrentSongInfo();
         updateProgressBar();
     }
 }
