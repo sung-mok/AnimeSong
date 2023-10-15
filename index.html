@@ -202,8 +202,8 @@
         }
 
         function togglePlaybackMode() {
-    if (player && typeof player.getCurrentTime === 'function' && typeof player.pauseVideo === 'function') {
-        if (currentMode === '일시정지' && player.getCurrentTime()) { 
+    if (player && typeof player.playVideo === 'function' && typeof player.pauseVideo === 'function') {
+        if (currentMode === '일시정지') { 
             currentMode = '재생';
             player.playVideo(); 
             document.getElementById('frameImage').src = 'tape.gif';
@@ -217,6 +217,7 @@
         updateModeIndicator();
     }
 }
+
 
 
         function updateModeIndicator() {
