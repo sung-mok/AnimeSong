@@ -126,34 +126,38 @@
               isAnimating = false;
           }
       }
-        function animateTape() {
-            const tapeImage = document.getElementById('tapeImage');
-            if (currentFrame > totalFrames) {
-                currentFrame = 0;
-            }
-            tapeImage.src = `tape_frame/frame_${currentFrame}.png`;
-            currentFrame++;
+     function animateTape() {
+        const tapeImage = document.getElementById('tapeImage');
+        if (currentFrame > totalFrames) {
+            currentFrame = 0;
         }
+        tapeImage.src = `tape_frame/frame_${currentFrame}.png`;
+        currentFrame++;
+    
+        if (isAnimating) {
+            requestAnimationFrame(animateTape);
+        }
+    }
+    
+    function toggleAnimation() {
+        const playIcon = document.querySelector('.play-icon');
+        const pauseIcon = document.querySelector('.pause-icon');
+    
+        if (isAnimating) {
+            player.pauseVideo();
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        } else {
+            requestAnimationFrame(animateTape);
+            player.playVideo();
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+        }
+        isAnimating = !isAnimating;
+    
+        updateStatusText();
+    }
 
-        function toggleAnimation() {
-          const playIcon = document.querySelector('.play-icon');
-          const pauseIcon = document.querySelector('.pause-icon');
-
-          if (isAnimating) {
-              clearInterval(animationInterval);
-              player.pauseVideo(); // 동영상 일시정지
-              playIcon.style.display = 'block';
-              pauseIcon.style.display = 'none';
-          } else {
-              animationInterval = setInterval(animateTape, 100);
-              player.playVideo(); // 동영상 재생
-              playIcon.style.display = 'none';
-              pauseIcon.style.display = 'block';
-          }
-          isAnimating = !isAnimating;
-
-          updateStatusText();  // 상태 텍스트 업데이트
-      }
       function onPlayerReady(event) {
           // 아무것도 하지 않도록 변경 (이전에는 자동재생을 막는 코드가 있었음)
       }
