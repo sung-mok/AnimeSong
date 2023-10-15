@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습4</title>
     <style>
         body, html {
             height: 100%;
@@ -176,7 +176,7 @@ function hideLoading() {
 }
 
 function loadSongs() {
-    showLoading(); // 로딩 화면 표시 시작
+    showLoading(); 
     fetch('Song.json')
         .then(response => {
             if (!response.ok) {
@@ -186,15 +186,15 @@ function loadSongs() {
         })
         .then(data => {
             songs = data.songs;
-            if (currentMode === '재생') {
+            if (currentMode === '재생' && songs.length > 0) { 
                 playRandomSong();
             }
-            hideLoading(); // 로딩 화면 숨김
+            hideLoading();
         })
         .catch(error => {
             console.error('Error loading song data:', error);
             alert('곡 목록을 로드하는데 문제가 발생했습니다. 나중에 다시 시도해주세요.');
-            hideLoading(); // 로딩 화면 숨김
+            hideLoading();
         });
 }
 
@@ -264,10 +264,11 @@ function moveToNextPhase() {
     currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
     const nextElement = document.querySelector(`.${currentPhase}`);
     nextElement.style.transform = 'translateX(0%)';
-
+    
     if (player && typeof player.pauseVideo === 'function') {
         player.pauseVideo();
     }
+    hideLoading(); // 여기서 로딩 화면을 숨깁니다.
 }
 
 function preloadAssets() {
