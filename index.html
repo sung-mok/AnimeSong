@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습4</title>
     <style>
         body, html {
             height: 100%;
@@ -217,18 +217,28 @@
             indicator.textContent = `모드: ${currentMode}`;
         }
 
-       function moveToNextPhase() {
+      function moveToNextPhase() {
     const currentElement = document.querySelector(`.${currentPhase}`);
     currentElement.classList.add('slide-out');
     currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
     const nextElement = document.querySelector(`.${currentPhase}`);
     nextElement.style.transform = 'translateX(0%)';
 
+    // 페이즈1로 이동할 때 일시정지 모드로 설정합니다.
+    if (currentPhase === 'phase1') {
+        currentMode = '일시정지';
+        player.pauseVideo(); // 동영상을 일시정지합니다.
+        document.getElementById('frameImage').src = 'frame_0.png';
+        document.getElementById('controlButton').src = '재생버튼.png';
+        updateModeIndicator();
+    }
+
     // 페이즈2로 이동할 때 곡 목록을 다시 로드합니다.
     if (currentPhase === 'phase2') {
         loadSongs();
     }
 }
+
 
 
         function preloadAssets() {
