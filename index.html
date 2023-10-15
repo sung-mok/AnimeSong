@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습2</title>
+    <title>재생연습3</title>
     <style>
         body, html {
             height: 100%;
@@ -151,14 +151,18 @@
                 .then(data => {
                     songs = data;
                     playRandomSong();  // 곡 목록 로딩 후 랜덤한 곡 재생
-                });
-        }
+                });  <script>
+        let currentPhase = 'phase0';
+        let currentMode = '일시정지';
+        let player;
+        let songs = [];
 
+        // 유튜브 API 준비 완료 시 호출되는 함수
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtubePlayer', {
-                height: '0',  // 플레이어를 숨깁니다.
+                height: '0',
                 width: '0',
-                videoId: '',  // 초기에는 비디오를 로드하지 않습니다.
+                videoId: '',
                 events: {
                     'onReady': onPlayerReady
                 }
@@ -166,14 +170,23 @@
         }
 
         function onPlayerReady(event) {
-            // 플레이어 준비가 되면 곡 목록을 로드합니다.
+            // 곡 목록을 로드합니다.
             loadSongs();
+        }
+
+        function loadSongs() {
+            fetch('Song.json')
+                .then(response => response.json())
+                .then(data => {
+                    songs = data.songs;
+                });
         }
 
         function playRandomSong() {
             const randomIndex = Math.floor(Math.random() * songs.length);
             const randomSong = songs[randomIndex];
             playSong(randomSong.youtube_link);
+            showSongInfo(randomSong);
         }
 
         function playSong(youtubeLink) {
@@ -181,33 +194,35 @@
             player.loadVideoById(videoId);
         }
 
+        function showSongInfo(song) {
+            const songInfoElement = document.getElementById('songInfo');
+            songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
+            songInfoElement.style.display = 'block';
+        }
 
-        const frameImage = document.getElementById('frameImage');
-         const controlButton = document.getElementById('controlButton');
-         const progressBar = document.getElementById('progressBar');
+        function togglePlaybackMode() {
+            if (currentMode === '일시정지') {
+                currentMode = '재생';
+                playRandomSong();
+                document.getElementById('frameImage').src = 'tape.gif';
+                document.getElementById('controlButton').src = '일시정지버튼.png';
+            } else {
+                currentMode = '일시정지';
+                player.pauseVideo();
+                document.getElementById('frameImage').src = 'frame_0.png';
+                document.getElementById('controlButton').src = '재생버튼.png';
+            }
+            updateModeIndicator();
+        }
 
-         progressBar.style.width = '50%';
-
-         function togglePlaybackMode() {
-             if (currentMode === '일시정지') {
-                 currentMode = '재생';
-                 frameImage.src = 'tape.gif';
-                 controlButton.src = '일시정지버튼.png';
-             } else {
-                 currentMode = '일시정지';
-                 frameImage.src = 'frame_0.png';
-                 controlButton.src = '재생버튼.png';
-             }
-             updateModeIndicator();
-         }
-
-         frameImage.addEventListener('click', togglePlaybackMode);
-         controlButton.addEventListener('click', togglePlaybackMode);
+        function updateModeIndicator() {
+            const indicator = document.getElementById('modeIndicator');
+            indicator.textContent = `모드: ${currentMode}`;
+        }
 
         function moveToNextPhase() {
             const currentElement = document.querySelector(`.${currentPhase}`);
             currentElement.classList.add('slide-out');
-
             currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
             const nextElement = document.querySelector(`.${currentPhase}`);
             nextElement.style.transform = 'translateX(0%)';
@@ -230,22 +245,8 @@
         }
 
         document.getElementById('signpost').addEventListener('click', moveToNextPhase);
-
-        function updateModeIndicator() {
-            const indicator = document.getElementById('modeIndicator');
-            indicator.textContent = `모드: ${currentMode}`;
-        }
-
-        function playRandomSong() {
-            const randomIndex = Math.floor(Math.random() * songs.length);
-            const randomSong = songs[randomIndex];
-            playSong(randomSong.youtube_link);
-
-            // 선택된 랜덤한 곡의 정보를 표시
-            const songInfoElement = document.getElementById('songInfo');
-            songInfoElement.textContent = `제목: ${randomSong.title}, 작품: ${randomSong.related_work}`;
-            songInfoElement.style.display = 'block'; // 정보 표시기 보이기
-        }
+        document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
+        document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
 
         window.onload = function() {
             updateModeIndicator();
