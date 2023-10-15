@@ -26,12 +26,16 @@
             transition: transform 1s;
         }
 
-        #phase1 {
+        #loadingPhase {
             transform: translateX(0);
         }
 
+        #phase1 {
+            transform: translateX(100%);
+        }
+
         #phase2 {
-            transform: translateX(-100%);
+            transform: translateX(200%);
         }
 
         .phase img {
@@ -83,19 +87,19 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
       let player;
-let isAnimating = false;
+      let isAnimating = false;
 
-function updateStatusText() {
-    const statusText = document.getElementById('statusText');
-    statusText.textContent = isAnimating ? '재생' : '일시정지';
-}
+    function updateStatusText() {
+        const statusText = document.getElementById('statusText');
+        statusText.textContent = isAnimating ? '재생' : '일시정지';
+    }
 
-let videoDuration = 0;
+    let videoDuration = 0;
 
 
 
         // 프리로딩 함수
-function preloadResources() {
+    function preloadResources() {
     const preloadImages = [
         'signpost.png', 
         'tape_frame/frame_0.png',
@@ -125,6 +129,7 @@ function loadJSON() {
             hideLoadingScreen();  // 모든 리소스가 로드된 후 로딩 화면 숨기기
         });
 }
+
 
 // 로딩 화면 숨기기 함수
 function hideLoadingScreen() {
