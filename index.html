@@ -86,6 +86,55 @@ function updateStatusText() {
 
 let videoDuration = 0;
 
+
+
+        // 프리로딩 함수
+function preloadResources() {
+    const preloadImages = [
+        'signpost.png', 
+        'tape_frame/frame_0.png',
+        'tape.gif'
+    ];  // 프리로드할 이미지의 URL 리스트
+
+    let imagesLoaded = 0;
+
+    preloadImages.forEach((url) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+            imagesLoaded++;
+            if (imagesLoaded === preloadImages.length) {
+                // 모든 이미지가 로드되면 JSON 파일 로드
+                loadJSON();
+            }
+        };
+    });
+}
+
+function loadJSON() {
+    fetch('Song.json')
+        .then(response => response.json())
+        .then(data => {
+            // 필요한 경우 여기서 JSON 데이터를 처리합니다.
+            hideLoadingScreen();  // 모든 리소스가 로드된 후 로딩 화면 숨기기
+        });
+}
+
+// 로딩 화면 숨기기 함수
+function hideLoadingScreen() {
+    const loadingPhase = document.getElementById('loadingPhase');
+    const phase1 = document.getElementById('phase1');
+
+    loadingPhase.style.transform = 'translateX(-100%)';
+    phase1.style.transform = 'translateX(0)';
+}
+
+// 웹 페이지가 로드되었을 때 프리로딩 시작
+window.onload = preloadResources;
+
+
+        
+
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '0',
