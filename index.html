@@ -326,7 +326,12 @@ function checkAnswer() {
 
 
 
-        function toggleAnimation() {
+  function toggleAnimation() {
+    if (typeof YT === 'undefined' || typeof YT.PlayerState === 'undefined') {
+        console.error("YouTube IFrame API is not fully loaded yet.");
+        return;
+    }
+
     if (!player || typeof player.getPlayerState !== 'function') {
         console.error("Player is not initialized or not ready yet.");
         return;
@@ -340,6 +345,7 @@ function checkAnswer() {
         player.playVideo();
     }
 }
+
 
 
 window.onload = function() {
