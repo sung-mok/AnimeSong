@@ -281,24 +281,39 @@ function toggleAnimation() {
 
 
         function checkAnswer() {
-    const inputText = document.getElementById('inputText').value;
-    const answerResult = document.getElementById('answerResult');
+            const inputText = document.getElementById('inputText').value;
+            const answerResult = document.getElementById('answerResult');
+        
+            fetch('Song.json')
+                .then(response => response.json())
+                .then(data => {
+                    const songs = data.songs;
+                    const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
+        
+                    if (currentSong) {
+                        if (inputText === currentSong.answer) {
+                            answerResult.textContent = "정답!";
+                        } else {
+                            answerResult.textContent = "실패!";
+                        }
+        
+                        // 1. 노래 멈추기
+                        player.stopVideo();
+        
+                        // 2. 다음 노래 재생
+                        loadAndPlayRandomSongFromJSON();
+        
+                        // 3. 텍스트 박스 비우기
+                        document.getElementById('inputText').value = '';
+        
+                        // 4. "정답" 또는 "실패" 메시지는 2초 후에 사라지게 합니다.
+                        setTimeout(() => {
+                            answerResult.textContent = "";
+                        }, 2000);
+                    }
+                });
+        }
 
-    fetch('Song.json')
-        .then(response => response.json())
-        .then(data => {
-            const songs = data.songs;
-            const currentSong = songs.find(song => extractVideoID(song.youtube_link) === player.getVideoData().video_id);
-
-            if (currentSong) {
-                if (inputText === currentSong.answer) {
-                    answerResult.textContent = "정답!";
-                } else {
-                    answerResult.textContent = "실패!";
-                }
-            }
-        });
-}
 
 </script>
 
