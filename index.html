@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습9</title>
+    <title>재생연습7</title>
     <style>
         body, html {
             height: 100%;
@@ -163,16 +163,12 @@
     }
 
     function loadSongs() {
-    fetch('./Song.json')
-        .then(response => response.json())
-        .then(data => {
-            songs = data.songs;
-            if (currentMode === '재생') { // 만약 현재 모드가 '재생' 모드라면
-                playRandomSong();       // 랜덤한 곡을 재생합니다.
-            }
-        });
-}
-
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = data.songs;
+            });
+    }
 
     function playRandomSong() {
         const randomIndex = Math.floor(Math.random() * songs.length);
@@ -193,20 +189,19 @@
     }
 
     function togglePlaybackMode() {
-    if (currentMode === '일시정지') {
-        currentMode = '재생';
-        player.playVideo(); // 동영상 재생
-        document.getElementById('frameImage').src = 'tape.gif';
-        document.getElementById('controlButton').src = '일시정지버튼.png';
-    } else {
-        currentMode = '일시정지';
-        player.pauseVideo(); // 동영상 일시정지
-        document.getElementById('frameImage').src = 'frame_0.png';
-        document.getElementById('controlButton').src = '재생버튼.png';
+        if (currentMode === '일시정지') {
+            currentMode = '재생';
+            playRandomSong();
+            document.getElementById('frameImage').src = 'tape.gif';
+            document.getElementById('controlButton').src = '일시정지버튼.png';
+        } else {
+            currentMode = '일시정지';
+            player.pauseVideo();
+            document.getElementById('frameImage').src = 'frame_0.png';
+            document.getElementById('controlButton').src = '재생버튼.png';
+        }
+        updateModeIndicator();
     }
-    updateModeIndicator();
-}
-
 
     function updateModeIndicator() {
         const indicator = document.getElementById('modeIndicator');
