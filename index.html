@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습4</title>
+    <title>재생연습5</title>
     <style>
         body, html {
             height: 100%;
@@ -125,6 +125,27 @@
             border-radius: 5px;
             font-weight: bold;
         }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .option {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .option:hover {
+            background-color: #2980b9;
+        }
+
     </style>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -148,7 +169,12 @@
         </div>
         <img class="play-button" src="재생버튼.png" alt="Play Button" id="controlButton">
         <!-- 현재 리스트된 곡의 숫자를 표시할 요소 추가 -->
-    <div class="song-count" id="songCount"></div>
+        <div class="song-count" id="songCount"></div>
+        <div class="options-container">
+            <button class="option" id="option1">보기1</button>
+            <button class="option" id="option2">보기2</button>
+            <button class="option" id="option3">보기3</button>
+        </div>
     </div>
 
     <script>
@@ -201,7 +227,10 @@
         const songInfoElement = document.getElementById('songInfo');
         songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
         songInfoElement.style.display = 'block';
+    
+        setOptions(song.title);
     }
+
 
   function togglePlaybackMode() {
     if (currentMode === '일시정지') {
@@ -283,6 +312,51 @@
         const progressBar = document.getElementById('progressBar');
         progressBar.style.width = `${progressPercentage}%`;
     }
+
+
+
+
+
+
+
+        function setOptions(correctTitle) {
+            const options = [correctTitle];
+            while (options.length < 3) {
+                const randomIndex = Math.floor(Math.random() * songs.length);
+                const title = songs[randomIndex].title;
+                if (options.indexOf(title) === -1) {
+                    options.push(title);
+                }
+            }
+        
+            // 보기 순서를 랜덤하게 섞기
+            options.sort(() => Math.random() - 0.5);
+        
+            document.getElementById('option1').textContent = options[0];
+            document.getElementById('option2').textContent = options[1];
+            document.getElementById('option3').textContent = options[2];
+        }
+        
+        function checkAnswer(selectedOption) {
+            const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
+            if (selectedOption.textContent === correctTitle) {
+                alert("정답입니다!");
+            } else {
+                alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
+            }
+        }
+        
+        // 각 보기 버튼에 이벤트 리스너 추가
+        document.getElementById('option1').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+        document.getElementById('option2').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+        document.getElementById('option3').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+
         
     document.getElementById('signpost').addEventListener('click', moveToNextPhase);
     document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
