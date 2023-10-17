@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습4</title>
     <style>
         body, html {
             height: 100%;
@@ -299,13 +299,25 @@
         indicator.textContent = `모드: ${currentMode}`;
     }
 
-    function moveToNextPhase() {
+   function moveToNextPhase() {
         const currentElement = document.querySelector(`.${currentPhase}`);
         currentElement.classList.add('slide-out');
         currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
         const nextElement = document.querySelector(`.${currentPhase}`);
         nextElement.style.transform = 'translateX(0%)';
+    
+        // 페이즈2가 아니면 무조건 일시정지 모드로 설정
+        if (currentPhase !== 'phase2') {
+            currentMode = '일시정지';
+            if (player) {
+                player.pauseVideo();
+            }
+            document.getElementById('frameImage').src = 'frame_0.png';
+            document.getElementById('controlButton').src = '재생버튼.png';
+            updateModeIndicator();
+        }
     }
+
 
     function preloadAssets() {
         const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
