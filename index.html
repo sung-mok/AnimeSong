@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습4</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -322,18 +322,32 @@
     function preloadAssets() {
         const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
         let loadedCount = 0;
-
+        const totalToLoad = imagesToLoad.length + 1; // 이미지 개수 + JSON 파일 1개
+    
+        // 이미지 미리 로드
         imagesToLoad.forEach(src => {
             const img = new Image();
             img.onload = () => {
                 loadedCount++;
-                if (loadedCount === imagesToLoad.length) {
+                if (loadedCount === totalToLoad) {
                     moveToNextPhase();
                 }
             };
             img.src = src;
         });
+    
+        // Song.json 파일 불러오기
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = data.songs;
+                loadedCount++;
+                if (loadedCount === totalToLoad) {
+                    moveToNextPhase();
+                }
+            });
     }
+
 
 
     function updateSongCount() {
