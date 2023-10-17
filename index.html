@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습5</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -212,6 +212,11 @@
     }
 
     function playRandomSong() {
+        // 현재 노래가 재생 중이면 노래 정지
+        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+            player.stopVideo();
+        }
+    
         const randomIndex = Math.floor(Math.random() * songs.length);
         const randomSong = songs[randomIndex];
         playSong(randomSong.youtube_link);
@@ -337,14 +342,18 @@
             document.getElementById('option3').textContent = options[2];
         }
         
-        function checkAnswer(selectedOption) {
+       function checkAnswer(selectedOption) {
             const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
             if (selectedOption.textContent === correctTitle) {
                 alert("정답입니다!");
             } else {
                 alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
             }
+        
+            // 다음 노래와 문제 로드
+            playRandomSong();
         }
+
         
         // 각 보기 버튼에 이벤트 리스너 추가
         document.getElementById('option1').addEventListener('click', function() {
