@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습4</title>
     <style>
         body, html {
             height: 100%;
@@ -114,6 +114,17 @@
             width: 0%; /* 초기 상태 */
             background: #3498db;
         }
+
+        .song-count {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border-radius: 5px;
+            font-weight: bold;
+        }
     </style>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -136,6 +147,8 @@
           <div class="progress-bar" id="progressBar"></div>
         </div>
         <img class="play-button" src="재생버튼.png" alt="Play Button" id="controlButton">
+        <!-- 현재 리스트된 곡의 숫자를 표시할 요소 추가 -->
+    <div class="song-count" id="songCount"></div>
     </div>
 
     <script>
@@ -168,6 +181,7 @@
             .then(response => response.json())
             .then(data => {
                 songs = data.songs;
+                updateSongCount(); // 곡의 숫자를 업데이트
             });
     }
 
@@ -251,6 +265,12 @@
             };
             img.src = src;
         });
+    }
+
+
+    function updateSongCount() {
+        const songCountElement = document.getElementById('songCount');
+        songCountElement.textContent = `곡 수: ${songs.length}`;
     }
 
 
