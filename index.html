@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
         body, html {
             height: 100%;
@@ -192,11 +192,29 @@
             width: '0',
             videoId: '',
             events: {
-                'onReady': onPlayerReady
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange // 상태 변경 이벤트 추가
             }
         });
     }
 
+
+    function onPlayerStateChange(event) {
+        // 노래가 끝났을 때
+        if (event.data === YT.PlayerState.ENDED) {
+            // 프로그래스바를 0%로 설정
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = '0%';
+    
+            // 다음 노래 재생
+            playRandomSong();
+        }
+    }
+
+
+
+
+        
     function onPlayerReady(event) {
         // 곡 목록을 로드합니다.
         loadSongs();
