@@ -315,8 +315,14 @@
             document.getElementById('frameImage').src = 'frame_0.png';
             document.getElementById('controlButton').src = '재생버튼.png';
             updateModeIndicator();
+        } else {
+            // 페이즈2로 진입할 때 플레이어 상태 초기화
+            if (player) {
+                player.stopVideo();
+            }
         }
     }
+
 
 
     function preloadAssets() {
