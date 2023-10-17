@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습2</title>
+    <title>재생연습3</title>
     <style>
         body, html {
             height: 100%;
@@ -141,6 +141,7 @@
     <script>
     let currentPhase = 'phase0';
     let currentMode = '일시정지';
+    let progressBarInterval;
 
     let player;
     let songs = [];
@@ -191,22 +192,34 @@
   function togglePlaybackMode() {
     if (currentMode === '일시정지') {
         currentMode = '재생';
+        
+        // 현재 노래가 없으면 임의의 노래를 선택하여 재생
         if (!player.getVideoData().video_id) {
-            // 현재 노래가 없으면 임의의 노래를 선택하여 재생
             playRandomSong();
         } else {
             // 기존 노래를 계속 재생
             player.playVideo();
         }
+
         document.getElementById('frameImage').src = 'tape.gif';
         document.getElementById('controlButton').src = '일시정지버튼.png';
+
+        // 프로그래스 바를 주기적으로 업데이트
+        progressBarInterval = setInterval(updateProgressBar, 1000); // 1초마다 업데이트
+
     } else {
         currentMode = '일시정지';
+
         // 현재 노래를 일시정지
         player.pauseVideo();
+
         document.getElementById('frameImage').src = 'frame_0.png';
         document.getElementById('controlButton').src = '재생버튼.png';
+
+        // 프로그래스 바 업데이트 중지
+        clearInterval(progressBarInterval);
     }
+
     updateModeIndicator();
 }
 
@@ -240,6 +253,17 @@
         });
     }
 
+
+
+    function updateProgressBar() {
+        const currentTime = player.getCurrentTime();
+        const duration = player.getDuration();
+        const progressPercentage = (currentTime / duration) * 100;
+    
+        const progressBar = document.getElementById('progressBar');
+        progressBar.style.width = `${progressPercentage}%`;
+    }
+        
     document.getElementById('signpost').addEventListener('click', moveToNextPhase);
     document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
     document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
