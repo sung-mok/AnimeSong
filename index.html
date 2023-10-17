@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습4</title>
+    <title>재생연습3</title>
     <style>
         body, html {
             height: 100%;
@@ -114,32 +114,6 @@
             width: 0%; /* 초기 상태 */
             background: #3498db;
         }
-        .answer-section {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        #answerInput {
-            padding: 5px 10px;
-            flex-grow: 1; /* 텍스트 박스가 가능한 많은 공간을 차지하도록 함 */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px; /* 버튼과의 간격 */
-        }
-        
-        #submitAnswer {
-            padding: 5px 10px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        #submitAnswer:hover {
-            background-color: #2980b9;
-        }
     </style>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -162,11 +136,6 @@
           <div class="progress-bar" id="progressBar"></div>
         </div>
         <img class="play-button" src="재생버튼.png" alt="Play Button" id="controlButton">
-        <!-- 텍스트 박스와 정답 버튼 추가 -->
-        <div class="answer-section">
-            <input type="text" id="answerInput" placeholder="정답을 입력하세요">
-            <button id="submitAnswer">정답</button>
-        </div>
     </div>
 
     <script>
