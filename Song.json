@@ -20,6 +20,21 @@
       "related_work": "포켓몬스터",
       "youtube_link": "https://www.youtube.com/watch?v=Hnr2Hi_nzoM",
       "answer": "포켓몬스터"
-    }
+    },
+    {
+      "id": 4,
+      "title": "카드캡터체리 더빙 op",
+      "related_work": "카드캡터체리",
+      "youtube_link": "https://www.youtube.com/watch?v=e6zp5Qob9ko",
+      "answer": "카드캡터체리"
+    },
+     {
+      "id": 5,
+      "title": "영혼기병 라젠카 ost",
+      "related_work": "영혼기병 라젠카",
+      "youtube_link": "https://www.youtube.com/watch?v=NFNf4Qu__yU",
+      "answer": "영혼기병 라젠카"
+    },
+    
   ]
 }
