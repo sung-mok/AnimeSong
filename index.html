@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습4</title>
     <style>
         body, html {
             height: 100%;
@@ -248,9 +248,11 @@
         fetch('./Song.json')
             .then(response => response.json())
             .then(data => {
-                songs = data; // 'songs' 키를 사용하지 않고 바로 data를 사용
+                songs = data;
+                updateSongCount();  // 여기에 추가
             });
     }
+
 
 
     function playRandomSong() {
@@ -263,6 +265,10 @@
         const randomSong = songs[randomIndex];
         playSong(randomSong.youtube_link);
         showSongInfo(randomSong);
+    
+        // 재생한 곡 제거
+        songs.splice(randomIndex, 1);
+        updateSongCount();
     }
 
     function playSong(youtubeLink) {
