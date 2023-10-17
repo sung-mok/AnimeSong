@@ -244,14 +244,14 @@
         loadSongs();
     }
 
-    function loadSongs() {
+       function loadSongs() {
         fetch('./Song.json')
             .then(response => response.json())
             .then(data => {
-                songs = data.songs;
-                updateSongCount(); // 곡의 숫자를 업데이트
+                songs = data; // 'songs' 키를 사용하지 않고 바로 data를 사용
             });
     }
+
 
     function playRandomSong() {
         // 현재 노래가 재생 중이면 노래 정지
