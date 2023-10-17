@@ -191,8 +191,13 @@
   function togglePlaybackMode() {
     if (currentMode === '일시정지') {
         currentMode = '재생';
-        // 기존 노래를 계속 재생
-        player.playVideo();
+        if (!player.getVideoData().video_id) {
+            // 현재 노래가 없으면 임의의 노래를 선택하여 재생
+            playRandomSong();
+        } else {
+            // 기존 노래를 계속 재생
+            player.playVideo();
+        }
         document.getElementById('frameImage').src = 'tape.gif';
         document.getElementById('controlButton').src = '일시정지버튼.png';
     } else {
@@ -204,6 +209,7 @@
     }
     updateModeIndicator();
 }
+
 
     function updateModeIndicator() {
         const indicator = document.getElementById('modeIndicator');
