@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>페이즈3-1</title>
     <style>
 body, html {
     height: 100%;
@@ -224,6 +224,11 @@ img {
         </div>
     </div>
 
+    <div class="phase phase3">
+        <ul id="resultList"></ul>
+        <div id="totalResult"></div>
+    </div>
+
     <script>
   let currentPhase = 'phase0';
 let currentMode = '일시정지';
@@ -232,6 +237,8 @@ let playOrder = [];
 let currentIndex = 0;
 let player;
 let songs = [];
+let selectedSongs = [];  // 랜덤으로 선택된 5곡의 정보를 저장합니다.
+let results = [];  // 각 곡에 대한 정답 여부를 저장합니다.
 
 function initialize() {
     updateModeIndicator();
@@ -397,7 +404,7 @@ function loadSongs() {
             
             // 섞인 노래 목록에서 상위 5곡만 선택합니다.
             playOrder = songs.slice(0, 5).map(song => song.id);
-            
+            selectedSongs = songs.slice(0, 5);
             updateSongCount();
         });
 }
@@ -455,13 +462,21 @@ function setOptions(correctTitle) {
 
 function checkAnswer(selectedOption) {
     const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
+    const isCorrect = selectedOption.textContent === correctTitle;
+    results.push(isCorrect);
     if (selectedOption.textContent === correctTitle) {
         alert("정답입니다!");
     } else {
         alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
     }
 
-    playNextSong();
+    if (results.length === selectedSongs.length) {
+        moveToNextPhase();
+        showResults();
+    } else {
+        playNextSong();
+    }
+    
 }
 
 function shuffle(array) {
@@ -487,6 +502,21 @@ function updateProgressBar() {
 function updateSongCount() {
     const songCountElement = document.getElementById('songCount');
     songCountElement.textContent = `곡 수: ${playOrder.length}`;
+}
+
+
+function showResults() {
+    const resultList = document.getElementById('resultList');
+    resultList.innerHTML = '';
+
+    selectedSongs.forEach((song, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = song.title + (results[index] ? " : O" : " : X");
+        resultList.appendChild(listItem);
+    });
+
+    const totalResult = document.getElementById('totalResult');
+    totalResult.textContent = `총 ${selectedSongs.length}곡 중 ${results.filter(result => result).length}곡 맞춤`;
 }
 
 window.onload = initialize;
