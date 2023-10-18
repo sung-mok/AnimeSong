@@ -243,13 +243,13 @@
         // 곡 목록을 로드합니다.
         loadSongs();
     }
-
-       function loadSongs() {
+    
+      function loadSongs() {
         fetch('./Song.json')
             .then(response => response.json())
             .then(data => {
-                songs = data;
-                updateSongCount();  // 여기에 추가
+                songs = Object.values(data.Sheet1); // 'Sheet1' 키 내의 모든 곡 정보를 배열로 변환
+                updateSongCount();  // 곡 숫자를 업데이트하는 함수를 여기서 호출
             });
     }
 
@@ -370,14 +370,14 @@
     
         // Song.json 파일 불러오기
         fetch('./Song.json')
-            .then(response => response.json())
-            .then(data => {
-                songs = data; // 'songs' 키를 사용하지 않고 바로 data를 사용
-                loadedCount++;
-                if (loadedCount === totalToLoad) {
-                    moveToNextPhase();
-                }
-            });
+        .then(response => response.json())
+        .then(data => {
+            songs = Object.values(data.Sheet1);
+            loadedCount++;
+            if (loadedCount === totalToLoad) {
+                moveToNextPhase();
+            }
+        });
     }
 
 
