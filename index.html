@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
 body, html {
     height: 100%;
@@ -55,7 +55,7 @@ body, html {
 }
 
 .slide-out {
-    transform: translateX(-100vw);
+    transform: translateX(-100vw) !important;
 }
 
 img {
@@ -387,9 +387,15 @@ img {
    function moveToNextPhase() {
         const currentElement = document.querySelector(`.${currentPhase}`);
         currentElement.classList.add('slide-out');
+    
+        // 이전 페이즈의 요소를 화면 밖으로 밀어냅니다.
+        setTimeout(() => {
+            currentElement.style.display = 'none';
+        }, 500); // 0.5초 후에 display를 none으로 설정 (transition이 끝나는 시점)
+    
         currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
         const nextElement = document.querySelector(`.${currentPhase}`);
-        nextElement.style.transform = 'translateX(0%)';
+        nextElement.style.removeProperty('transform'); // transform 스타일 제거
     
         // 페이즈2가 아니면 무조건 일시정지 모드로 설정
         if (currentPhase !== 'phase2') {
@@ -407,6 +413,7 @@ img {
             }
         }
     }
+
 
 
 
