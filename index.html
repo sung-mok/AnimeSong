@@ -404,7 +404,7 @@ function loadSongs() {
             shuffle(songs);
             
             // 섞인 노래 목록에서 상위 5곡만 선택합니다.
-            playOrder = songs.slice(0, 5).map(song => song.id);
+            playOrder = songs.slice(0, 10).map(song => song.id);
             selectedSongs = songs.slice(0, 5);
             updateSongCount();
         });
