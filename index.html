@@ -240,6 +240,26 @@
 
 
 
+
+     function recreatePlayer() {
+        if (player) {
+            player.destroy();
+        }
+    
+        player = new YT.Player('youtubePlayer', {
+            height: '0',
+            width: '0',
+            videoId: '',
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+
+
+
         
     function onPlayerReady(event) {
         // 곡 목록을 로드합니다.
@@ -400,6 +420,8 @@
                     moveToNextPhase();
                 }
             });
+
+       recreatePlayer();
     }
 
 
