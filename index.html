@@ -6,36 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>재생연습4</title>
     <style>
-       body, html {
+ body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
     overflow: hidden;
+    display: flex;          /* body 내부의 요소들을 flexbox로 배치 */
+    flex-direction: row;    /* 요소들을 가로 방향으로 배치 */
 }
 
-.phase {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.phase, .phase1, .phase2 {
+    width: 100%;            /* 각 페이즈의 너비를 100%로 설정 */
+    height: 100%;
+    position: relative;     /* 절대 위치 대신 상대 위치로 변경 */
     display: flex;
     justify-content: center;
     align-items: center;
     transition: transform 0.5s;
-    transform: translateX(100%);
+    transform: translateX(100%);   /* 초기 위치를 화면의 오른쪽으로 설정 */
 }
 
-.phase1 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+.phase0 {
+    transform: none;        /* 페이즈 0만 초기에 화면에 보이도록 설정 */
 }
 
 .song-info {
@@ -49,14 +41,6 @@
     font-weight: bold;
     font-size: 14px;
     display: none;
-}
-
-.phase0 {
-    transform: none;
-}
-
-.slide-out {
-    transform: translateX(-100%) !important;
 }
 
 img {
@@ -78,25 +62,13 @@ img {
     100% { transform: rotate(360deg); }
 }
 
-.phase2 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
 .phase2 img.frame {
-    width: 30%;
+    width: 20%;
     margin-bottom: 20px;
 }
 
 .phase2 img.play-button {
-    width: 15%;
+    width: 10%;
 }
 
 .mode-indicator {
@@ -164,32 +136,6 @@ img {
     max-width: 50%;
     max-height: 50%;
     margin-left: 10px;
-}
-
-/* 반응형 웹 디자인 - 화면 크기에 따른 스타일 변경 */
-
-
-
-/* 중간 크기의 화면 (예: 태블릿)에 대한 스타일 */
-@media screen and (max-width: 1024px) and (min-width: 769px) {
-    .phase2 img.frame {
-        width: 50%;
-    }
-
-    .phase2 img.play-button {
-        width: 25%;
-    }
-}
-
-/* 작은 크기의 화면 (예: 스마트폰)에 대한 스타일 */
-@media screen and (max-width: 768px) {
-    .phase2 img.frame {
-        width: 70%;
-    }
-
-    .phase2 img.play-button {
-        width: 35%;
-    }
 }
 
     </style>
