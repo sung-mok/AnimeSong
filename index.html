@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -258,12 +258,12 @@
 
 
     function playNextSong() {
-        if (currentIndex >= playOrder.length) {
+        if (playOrder.length === 0) {
             alert("모든 노래를 재생하였습니다.");
             return;
         }
     
-        const songId = playOrder[currentIndex];
+        const songId = playOrder[0];  // 첫 번째 곡의 ID를 가져옵니다.
         const song = songs.find(s => s.id === songId); // 해당 ID의 노래를 찾기
     
         if (!song) {
@@ -274,7 +274,7 @@
         playSong(song.youtube_link);
         showSongInfo(song);
     
-        playOrder.splice(currentIndex, 1);  // 현재 재생한 노래를 playOrder에서 제거
+        playOrder.splice(0, 1);  // 현재 재생한 노래를 playOrder에서 제거
         updateSongCount();
     }
 
@@ -408,7 +408,7 @@
 
     function updateSongCount() {
         const songCountElement = document.getElementById('songCount');
-        songCountElement.textContent = `곡 수: ${songs.length}`;
+        songCountElement.textContent = `곡 수: ${playOrder.length}`;
     }
 
 
