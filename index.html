@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈3-4</title>
+    <title>페이즈3-5</title>
     <style>
 body, html {
     height: 100%;
@@ -462,23 +462,23 @@ function playSong(youtubeLink) {
 
 function showSongInfo(song) {
     const songInfoElement = document.getElementById('songInfo');
-    songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
+    songInfoElement.textContent = `작품: ${song.related_work}, 제목: ${song.title}`;
     //songInfoElement.style.display = 'block';
 
-    setOptions(song.title);
+    setOptions(song.related_work);
 }
 
-function setOptions(correctTitle) {
-    const options = [correctTitle];
+function setOptions(correctWork) {
+    const options = [correctWork];
 
-    // 정답인 노래를 제외한 나머지 노래 목록을 준비합니다.
-    const otherSongs = songs.filter(song => song.title !== correctTitle);
+    // 정답인 작품을 제외한 나머지 작품 목록을 준비합니다.
+    const otherSongs = songs.filter(song => song.related_work !== correctWork);
 
     while (options.length < 3) {
         const randomIndex = Math.floor(Math.random() * otherSongs.length);
-        const title = otherSongs[randomIndex].title;
-        if (options.indexOf(title) === -1) {
-            options.push(title);
+        const work = otherSongs[randomIndex].related_work;
+        if (options.indexOf(work) === -1) {
+            options.push(work);
         }
     }
 
