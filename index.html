@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습5</title>
+    <title>재생연습1</title>
     <style>
         body, html {
             height: 100%;
@@ -299,7 +299,7 @@
         
         // 현재 노래가 없으면 임의의 노래를 선택하여 재생
         if (!player.getVideoData().video_id) {
-            playRandomSong();
+            playNextSong();
         } else {
             // 기존 노래를 계속 재생
             player.playVideo();
