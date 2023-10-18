@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈3-1</title>
+    <title>페이즈3-2</title>
     <style>
 body, html {
     height: 100%;
@@ -446,9 +446,13 @@ function showSongInfo(song) {
 
 function setOptions(correctTitle) {
     const options = [correctTitle];
+
+    // 정답인 노래를 제외한 나머지 노래 목록을 준비합니다.
+    const otherSongs = songs.filter(song => song.title !== correctTitle);
+
     while (options.length < 3) {
-        const randomIndex = Math.floor(Math.random() * songs.length);
-        const title = songs[randomIndex].title;
+        const randomIndex = Math.floor(Math.random() * otherSongs.length);
+        const title = otherSongs[randomIndex].title;
         if (options.indexOf(title) === -1) {
             options.push(title);
         }
@@ -460,6 +464,7 @@ function setOptions(correctTitle) {
     document.getElementById('option2').textContent = options[1];
     document.getElementById('option3').textContent = options[2];
 }
+
 
 function checkAnswer(selectedOption) {
     const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
