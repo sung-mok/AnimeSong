@@ -4,12 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습4</title>
     <style>
 body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
+    
+}
+
+
+body {
+    overflow-x: hidden;
 }
 
 .phase {
@@ -397,6 +403,7 @@ img {
 
     currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
     const nextElement = document.querySelector(`.${currentPhase}`);
+    nextElement.style.transform = 'translateX(0)';  // 이 부분을 추가합니다.
     nextElement.style.removeProperty('transform'); // transform 스타일 제거
     nextElement.style.display = 'flex'; // 다음 페이즈 요소를 화면에 표시합니다.
 
