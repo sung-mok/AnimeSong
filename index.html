@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
 body, html {
     height: 100%;
@@ -260,9 +260,7 @@ function preloadAssets() {
         const img = new Image();
         img.onload = () => {
             loadedCount++;
-            if (loadedCount === totalToLoad) {
-                moveToNextPhase();
-            }
+            // moveToNextPhase 함수 호출 코드를 제거합니다.
         };
         img.src = src;
     });
@@ -274,9 +272,7 @@ function preloadAssets() {
             playOrder = songs.map(song => song.id);
             shuffle(playOrder);
             loadedCount++;
-            if (loadedCount === totalToLoad) {
-                moveToNextPhase();
-            }
+            // moveToNextPhase 함수 호출 코드를 제거합니다.
         });
 
     recreatePlayer();
@@ -371,7 +367,9 @@ function recreatePlayer() {
 }
 
 function onPlayerReady(event) {
+    console.log("Player is ready!");
     loadSongs();
+    moveToNextPhase(); // 여기에 moveToNextPhase 함수를 호출합니다.
 }
 
 function loadSongs() {
