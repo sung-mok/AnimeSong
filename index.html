@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습7</title>
+    <title>재생연습8</title>
     <style>
 body, html {
     height: 100%;
@@ -284,19 +284,7 @@ img {
     let player;
     let songs = [];
 
-    // 유튜브 API 준비 완료 시 호출되는 함수
-    // 유튜브 API 준비 완료 시 호출되는 함수
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('youtubePlayer', {
-        height: '0',
-        width: '0',
-        videoId: '',
-        events: {
-            'onStateChange': onPlayerStateChange // 상태 변경 이벤트만 남깁니다
-        }
-    });
-}
-
+   
 
     function onPlayerStateChange(event) {
         // 노래가 끝났을 때
@@ -311,14 +299,28 @@ function onYouTubeIframeAPIReady() {
     }
 
 
-
-
-
-     function recreatePlayer() {
+    function createOrRecreatePlayer() {
     if (player) {
         player.destroy();
     }
 
+    player = new YT.Player('youtubePlayer', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        events: {
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+// 유튜브 API 준비 완료 시 호출되는 함수
+function onYouTubeIframeAPIReady() {
+    createOrRecreatePlayer();
+}
+
+
+    
     player = new YT.Player('youtubePlayer', {
         height: '0',
         width: '0',
@@ -487,7 +489,7 @@ function onYouTubeIframeAPIReady() {
             }
         });
 
-    recreatePlayer();
+    createOrRecreatePlayer();
 }
 
 
