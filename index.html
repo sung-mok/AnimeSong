@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습6</title>
+    <title>재생연습7</title>
     <style>
 body, html {
     height: 100%;
@@ -285,17 +285,17 @@ img {
     let songs = [];
 
     // 유튜브 API 준비 완료 시 호출되는 함수
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtubePlayer', {
-            height: '0',
-            width: '0',
-            videoId: '',
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange // 상태 변경 이벤트 추가
-            }
-        });
-    }
+    // 유튜브 API 준비 완료 시 호출되는 함수
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtubePlayer', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        events: {
+            'onStateChange': onPlayerStateChange // 상태 변경 이벤트만 남깁니다
+        }
+    });
+}
 
 
     function onPlayerStateChange(event) {
@@ -315,29 +315,22 @@ img {
 
 
      function recreatePlayer() {
-        if (player) {
-            player.destroy();
+    if (player) {
+        player.destroy();
+    }
+
+    player = new YT.Player('youtubePlayer', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        events: {
+            'onStateChange': onPlayerStateChange // 상태 변경 이벤트만 남깁니다
         }
-    
-        player = new YT.Player('youtubePlayer', {
-            height: '0',
-            width: '0',
-            videoId: '',
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    }
+    });
+}
 
 
 
-
-        
-    function onPlayerReady(event) {
-        // 곡 목록을 로드합니다.
-        
-    }
     
       function loadSongs() {
         fetch('./Song.json')
