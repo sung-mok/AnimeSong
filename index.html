@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
 body, html {
     height: 100%;
@@ -384,9 +384,12 @@ function loadSongs() {
                 song.id = id;
                 return song;
             });
+            playOrder = songs.map(song => song.id);  // 이 부분을 추가하여 모든 노래의 ID를 playOrder 배열에 추가합니다.
+            shuffle(playOrder);  // playOrder 배열을 섞어서 랜덤한 재생 순서를 얻습니다.
             updateSongCount();
         });
 }
+
 
 function playNextSong() {
     const songId = playOrder[0];
