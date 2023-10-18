@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습1</title>
     <style>
 body, html {
     height: 100%;
@@ -275,7 +275,8 @@ function loadJSONData() {
         .then(response => response.json())
         .then(data => {
             songs = Object.entries(data.Sheet1).map(([id, song]) => ({...song, id}));
-            playOrder = songs.map(song => song.id);
+            playOrder = songs.map(song => String(song.id));
+
             shuffle(playOrder);
             moveToNextPhase();  // JSON 로딩이 끝난 후 moveToNextPhase 호출
         });
