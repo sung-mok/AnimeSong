@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습1</title>
     <style>
 body, html {
     height: 100%;
@@ -385,7 +385,7 @@ function loadSongs() {
 }
 
 function playNextSong() {
-     const songId = playOrder[0];
+    const songId = Number(playOrder[0]);
     console.log("Trying to play song with ID:", songId); // 현재 재생하려는 노래의 ID를 출력합니다.
     console.log("All song IDs in playOrder array:", playOrder); // playOrder 배열의 모든 노래 ID를 출력합니다.
 
