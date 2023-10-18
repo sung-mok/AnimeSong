@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습3</title>
+    <title>재생연습4</title>
     <style>
 body, html {
     height: 100%;
@@ -283,6 +283,7 @@ function preloadAssets() {
 }
 
 function moveToNextPhase() {
+    console.log(player); // player 객체의 상태 출력
     const currentElement = document.querySelector(`.${currentPhase}`);
     currentElement.classList.add('slide-out');
     currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
@@ -332,6 +333,7 @@ function togglePlaybackMode() {
 }
 
 function onYouTubeIframeAPIReady() {
+     console.log("YouTube API is ready!"); // 이 로그가 출력되는지 확인
     player = new YT.Player('youtubePlayer', {
         height: '0',
         width: '0',
