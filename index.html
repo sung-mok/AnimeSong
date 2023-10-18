@@ -4,321 +4,539 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습6</title>
+    <title>재생연습4</title>
     <style>
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
-        body {
-            overflow-x: hidden;
-        }
+body {
+    overflow-x: hidden;
+}
 
-        .phase {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.5s;
-            transform: translateX(100vw);
-        }
+.phase {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s;
+    transform: translateX(100vw);
+}
 
-        .phase1 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-        }
+.phase1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
 
-        .song-info {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 14px;
-            display: none;
-        }
+.song-info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    display: none;
+}
 
-        .phase0 {
-            transform: translateX(0);
-        }
+.phase0 {
+    transform: translateX(0);
+}
 
-        .slide-out {
-            transform: translateX(-100vw) !important;
-        }
+.slide-out {
+    transform: translateX(-100vw) !important;
+}
 
-        img {
-            max-width: 100%;
-            max-height: 100%;
-        }
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
 
-        .loading-indicator {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-        }
+.loading-indicator {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+.phase2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-        .phase2 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+.phase2 img.frame {
+    width: 30%;
+    margin-bottom: 20px;
+}
 
-        .phase2 img.frame {
-            width: 30%;
-            margin-bottom: 20px;
-        }
+.phase2 img.play-button {
+    width: 15%;
+}
 
-        .phase2 img.play-button {
-            width: 15%;
-        }
+.mode-indicator {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border-radius: 5px;
+    font-weight: bold;
+}
 
-        .mode-indicator {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 5px 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            border-radius: 5px;
-            font-weight: bold;
-        }
+.progress-container {
+    width: 70%;
+    height: 5px;
+    background: #eee;
+    margin: 15px 0;
+    border-radius: 3px;
+    overflow: hidden;
+}
 
-        .progress-container {
-            width: 70%;
-            height: 5px;
-            background: #eee;
-            margin: 15px 0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #3498db;
+}
 
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: #3498db;
-        }
+.song-count {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border-radius: 5px;
+    font-weight: bold;
+}
 
-        .song-count {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            padding: 5px 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            border-radius: 5px;
-            font-weight: bold;
-        }
+.options-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 
-        .options-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+.option {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-        .option {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border: none;
-            background-color: #3498db;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+.option:hover {
+    background-color: #2980b9;
+}
 
-        .option:hover {
-            background-color: #2980b9;
-        }
+.play-button {
+    cursor: pointer;
+}
 
-        .play-button {
-            cursor: pointer;
-        }
+#signpost {
+    max-width: 50%;
+    max-height: 50%;
+    margin-left: 10px;
+}
 
-        #signpost {
-            max-width: 50%;
-            max-height: 50%;
-            margin-left: 10px;
-        }
+/* 반응형 웹 디자인 - 화면 크기에 따른 스타일 변경 */
 
-        @media screen and (max-width: 1024px) and (min-width: 769px) {
-            .phase2 img.frame {
-                width: 50%;
-            }
+/* 중간 크기의 화면 (예: 태블릿)에 대한 스타일 */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    .phase2 img.frame {
+        width: 50%;
+    }
 
-            .phase2 img.play-button {
-                width: 25%;
-            }
-        }
+    .phase2 img.play-button {
+        width: 25%;
+    }
+}
 
-        @media screen and (max-width: 768px) {
-            .phase2 img.frame {
-                width: 70%;
-            }
+/* 작은 크기의 화면 (예: 스마트폰)에 대한 스타일 */
+@media screen and (max-width: 768px) {
+    .phase2 img.frame {
+        width: 70%;
+    }
 
-            .phase2 img.play-button {
-                width: 35%;
-            }
+    .phase2 img.play-button {
+        width: 35%;
+    }
+}
 
-            #signpost {
-                max-width: 70%;
-                max-height: 70%;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .phase2 img.frame {
-                width: 90%;
-            }
-
-            .phase2 img.play-button {
-                width: 45%;
-            }
-        }
     </style>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 
 <body>
-
-    <div id="app">
-        <div class="phase phase0" style="background-color: black;">
-            <div class="loading-indicator"></div>
+    <div class="phase phase0">
+        <div class="loading-indicator"></div>
+    </div>
+    <div class="phase phase1">
+        <img src="signpost.png" alt="Signpost Phase 1" id="signpost">
+    </div>
+    <div class="phase phase2">
+        <!-- 곡 정보 표시기 추가 -->
+        <div class="song-info" id="songInfo"></div>
+        <div id="youtubePlayer"></div>
+        <div class="mode-indicator" id="modeIndicator"></div>
+        <img class="frame" src="frame_0.png" alt="Frame Image" id="frameImage">
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
         </div>
-
-        <div class="phase phase1">
-            <img id="signpost" src="images/signpost.png">
-            <div class="song-info">Now Playing: <span id="song-name">Loading...</span></div>
-        </div>
-
-        <div class="phase phase2">
-            <img class="frame" src="images/album-frame.png">
-            <img class="play-button" src="images/play-button.png" onclick="togglePlay()">
-            <div class="progress-container">
-                <div class="progress-bar"></div>
-            </div>
-            <div class="song-count">Song <span id="song-number">0</span> of <span id="total-songs">0</span></div>
-            <div class="options-container">
-                <button class="option" onclick="playNextSong()">Next</button>
-                <button class="option" onclick="playPreviousSong()">Previous</button>
-            </div>
+        <img class="play-button" src="재생버튼.png" alt="Play Button" id="controlButton">
+        <!-- 현재 리스트된 곡의 숫자를 표시할 요소 추가 -->
+        <div class="song-count" id="songCount"></div>
+        <div class="options-container">
+            <button class="option" id="option1">보기1</button>
+            <button class="option" id="option2">보기2</button>
+            <button class="option" id="option3">보기3</button>
         </div>
     </div>
 
     <script>
-        let phase = 0;
-        let songList = [];
-        let currentSongIndex = 0;
-        let player;
-        let songData;
-        let isPlaying = false;
-        let shuffleMode = false;
-        let intervalId;
+    let currentPhase = 'phase0';
+    let currentMode = '일시정지';
+    let progressBarInterval;
+    let playOrder = []; // 재생 순서를 저장할 배열
+    let currentIndex = 0; // 현재 재생 중인 노래의 인덱스
 
-        async function initializeApp() {
-            const res = await fetch('songList.json');
-            songData = await res.json();
-            songList = songData.songs;
-            document.getElementById('total-songs').innerText = songList.length;
-            loadYoutubeApi();
-            moveNextPhase();
-            updateSongInfo();
-            updateSongCount();
+    let player;
+    let songs = [];
+
+    // 유튜브 API 준비 완료 시 호출되는 함수
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtubePlayer', {
+            height: '0',
+            width: '0',
+            videoId: '',
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange // 상태 변경 이벤트 추가
+            }
+        });
+    }
+
+
+    function onPlayerStateChange(event) {
+        // 노래가 끝났을 때
+        if (event.data === YT.PlayerState.ENDED) {
+            // 프로그래스바를 0%로 설정
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = '0%';
+    
+            // 다음 노래 재생
+            player.playVideo();
+        }
+    }
+
+
+
+
+
+     function recreatePlayer() {
+        if (player) {
+            player.destroy();
+        }
+    
+        player = new YT.Player('youtubePlayer', {
+            height: '0',
+            width: '0',
+            videoId: '',
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+
+
+
+        
+    function onPlayerReady(event) {
+        // 곡 목록을 로드합니다.
+        
+    }
+    
+      function loadSongs() {
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = Object.entries(data.Sheet1).map(([id, song]) => {
+                    song.id = Number(id);  // 각 노래 객체에 id 필드 추가
+                    return song;
+                });
+                updateSongCount();
+            });
+    }
+
+
+
+
+  function playNextSong() {
+    if (playOrder.length === 0) {
+        alert("모든 노래를 재생하였습니다.");
+        return;
+    }
+
+    const songId = playOrder[0];
+    
+    if (!songId) {
+        console.error("Song ID is undefined. Current playOrder:", playOrder);
+        return;
+    }
+
+    const song = songs.find(s => s.id === songId);
+
+    if (!song) {
+        alert("노래를 찾을 수 없습니다.");
+        return;
+    }
+
+    playSong(song.youtube_link);
+    showSongInfo(song);
+
+    playOrder.splice(0, 1);
+    updateSongCount();
+}
+
+
+
+
+    function playSong(youtubeLink) {
+        const videoId = youtubeLink.split("v=")[1];
+        player.loadVideoById(videoId);
+    }
+
+    function showSongInfo(song) {
+        const songInfoElement = document.getElementById('songInfo');
+        songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
+        songInfoElement.style.display = 'block';
+    
+        setOptions(song.title);
+    }
+
+
+  function togglePlaybackMode() {
+    if (currentMode === '일시정지') {
+        currentMode = '재생';
+        
+        // 현재 노래가 없으면 임의의 노래를 선택하여 재생
+        if (!player.getVideoData().video_id) {
+            playNextSong();
+        } else {
+            // 기존 노래를 계속 재생
+            player.playVideo();
         }
 
-        function loadYoutubeApi() {
-            const tag = document.createElement('script');
-            tag.src = "https://www.youtube.com/iframe_api";
-            const firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        }
+        document.getElementById('frameImage').src = 'tape.gif';
+        document.getElementById('controlButton').src = '일시정지버튼.png';
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '390',
-                width: '640',
-                videoId: songList[currentSongIndex].id,
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+        // 프로그래스 바를 주기적으로 업데이트
+        progressBarInterval = setInterval(updateProgressBar, 1000); // 1초마다 업데이트
+
+    } else {
+        currentMode = '일시정지';
+
+        // 현재 노래를 일시정지
+        player.pauseVideo();
+
+        document.getElementById('frameImage').src = 'frame_0.png';
+        document.getElementById('controlButton').src = '재생버튼.png';
+
+        // 프로그래스 바 업데이트 중지
+        clearInterval(progressBarInterval);
+    }
+
+    updateModeIndicator();
+}
+
+
+    function updateModeIndicator() {
+        const indicator = document.getElementById('modeIndicator');
+        indicator.textContent = `모드: ${currentMode}`;
+    }
+
+   function moveToNextPhase() {
+        const currentElement = document.querySelector(`.${currentPhase}`);
+        currentElement.classList.add('slide-out');
+        currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
+        const nextElement = document.querySelector(`.${currentPhase}`);
+        nextElement.style.transform = 'translateX(0%)';
+    
+        // 페이즈2가 아니면 무조건 일시정지 모드로 설정
+        if (currentPhase !== 'phase2') {
+            currentMode = '일시정지';
+            if (player) {
+                player.pauseVideo();
+            }
+            document.getElementById('frameImage').src = 'frame_0.png';
+            document.getElementById('controlButton').src = '재생버튼.png';
+            updateModeIndicator();
+        } else {
+            // 페이즈2로 진입할 때 플레이어 상태 초기화
+            if (player) {
+                player.stopVideo();
+            }
+        }
+    }
+
+
+
+   function preloadAssets() {
+        const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
+        let loadedCount = 0;
+        const totalToLoad = imagesToLoad.length + 1; // 이미지 개수 + JSON 파일 1개
+        
+        // 이미지 미리 로드
+        imagesToLoad.forEach(src => {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === totalToLoad) {
+                    moveToNextPhase();
+                }
+            };
+            img.src = src;
+        });
+        
+        // Song.json 파일 불러오기
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = Object.entries(data.Sheet1).map(([id, song]) => ({...song, id})); // 각 곡 객체에 ID 추가
+                playOrder = songs.map(song => song.id); // 곡 ID들만 추출
+                shuffle(playOrder); // 재생 순서를 랜덤하게 섞음
+                loadedCount++;
+                if (loadedCount === totalToLoad) {
+                    moveToNextPhase();
                 }
             });
-        }
 
-        function onPlayerReady(event) {
-            event.target.playVideo();
-        }
+       recreatePlayer();
+    }
 
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                isPlaying = true;
-                startProgressUpdate();
-            } else if (event.data === YT.PlayerState.PAUSED) {
-                isPlaying = false;
-                stopProgressUpdate();
-            } else if (event.data === YT.PlayerState.ENDED) {
-                playNextSong();
+
+
+
+    
+    // 배열을 랜덤하게 섞는 함수
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+
+
+
+
+    function updateSongCount() {
+        const songCountElement = document.getElementById('songCount');
+        songCountElement.textContent = `곡 수: ${playOrder.length}`;
+    }
+
+
+
+    function updateProgressBar() {
+        const currentTime = player.getCurrentTime();
+        const duration = player.getDuration();
+        const progressPercentage = (currentTime / duration) * 100;
+    
+        const progressBar = document.getElementById('progressBar');
+        progressBar.style.width = `${progressPercentage}%`;
+    }
+
+
+
+
+
+
+
+        function setOptions(correctTitle) {
+            const options = [correctTitle];
+            while (options.length < 3) {
+                const randomIndex = Math.floor(Math.random() * songs.length);
+                const title = songs[randomIndex].title;
+                if (options.indexOf(title) === -1) {
+                    options.push(title);
+                }
             }
+        
+            // 보기 순서를 랜덤하게 섞기
+            options.sort(() => Math.random() - 0.5);
+        
+            document.getElementById('option1').textContent = options[0];
+            document.getElementById('option2').textContent = options[1];
+            document.getElementById('option3').textContent = options[2];
         }
-
-        function togglePlay() {
-            if (isPlaying) {
-                player.pauseVideo();
+        
+       function checkAnswer(selectedOption) {
+            const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
+            if (selectedOption.textContent === correctTitle) {
+                alert("정답입니다!");
             } else {
-                player.playVideo();
+                alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
             }
+        
+            // 다음 노래와 문제 로드
+            playNextSong();
         }
 
-        function moveNextPhase() {
-            if (phase >= 2) return;
-            const currentPhase = document.querySelector(`.phase${phase}`);
-            currentPhase.classList.add('slide-out');
-            phase++;
-            const nextPhase = document.querySelector(`.phase${phase}`);
-            nextPhase.classList.add('phase0');
-        }
+        
+        // 각 보기 버튼에 이벤트 리스너 추가
+        document.getElementById('option1').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+        document.getElementById('option2').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+        document.getElementById('option3').addEventListener('click', function() {
+            checkAnswer(this);
+        });
 
-        function updateSongInfo() {
-            document.getElementById('song-name').innerText = songList[currentSongIndex].name;
-        }
+        
+    document.getElementById('signpost').addEventListener('click', moveToNextPhase);
+    document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
+    document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
 
-        function updateSongCount() {
-            // The function content seems to be missing. Add the required logic here.
-        }
-    </script>
+    window.onload = function() {
+        updateModeIndicator();
+        preloadAssets();
+    };
+</script>
 
 </body>
 
