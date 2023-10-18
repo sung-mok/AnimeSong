@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
 body, html {
     height: 100%;
@@ -380,6 +380,8 @@ function loadSongs() {
 }
 
 function playNextSong() {
+     const songId = playOrder[0];
+    const song = songs.find(s => s.id === songId);
     if (playOrder.length === 0) {
         alert("모든 노래를 재생하였습니다.");
         console.log("Current songId:", songId);
@@ -387,8 +389,7 @@ function playNextSong() {
         return;
     }
 
-    const songId = playOrder[0];
-    const song = songs.find(s => s.id === songId);
+   
 
     if (!song) {
         alert("노래를 찾을 수 없습니다.");
