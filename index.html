@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
 body, html {
     height: 100%;
@@ -253,35 +253,30 @@ function setupEventListeners() {
 
 function preloadAssets() {
     const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
-
-    let loadedImages = 0;
+    let loadedCount = 0;
+    const totalToLoad = imagesToLoad.length + 1;
 
     imagesToLoad.forEach(src => {
         const img = new Image();
         img.onload = () => {
-            loadedImages++;
-            if (loadedImages === imagesToLoad.length) {
-                // 이미지 로딩이 모두 끝난 후 JSON 로딩 시작
-                loadJSONData();
-            }
+            loadedCount++;
+            // moveToNextPhase 함수 호출 코드를 제거합니다.
         };
         img.src = src;
     });
-}
 
-
-function loadJSONData() {
     fetch('./Song.json')
         .then(response => response.json())
         .then(data => {
             songs = Object.entries(data.Sheet1).map(([id, song]) => ({...song, id}));
-            playOrder = songs.map(song => String(song.id));
-
+            playOrder = songs.map(song => song.id);
             shuffle(playOrder);
-            moveToNextPhase();  // JSON 로딩이 끝난 후 moveToNextPhase 호출
+            loadedCount++;
+            // moveToNextPhase 함수 호출 코드를 제거합니다.
         });
+
+    recreatePlayer();
 }
-     
 
 function moveToNextPhase() {
     console.log(player); // player 객체의 상태 출력
