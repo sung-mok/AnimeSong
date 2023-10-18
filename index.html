@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습2</title>
+    <title>재생연습3</title>
     <style>
         body, html {
             height: 100%;
@@ -274,7 +274,7 @@
         playSong(song.youtube_link);
         showSongInfo(song);
     
-        currentIndex++; // 다음 노래를 위해 인덱스 증가
+        playOrder.splice(currentIndex, 1);  // 현재 재생한 노래를 playOrder에서 제거
         updateSongCount();
     }
 
