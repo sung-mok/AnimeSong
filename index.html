@@ -4,18 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습3</title>
     <style>
 body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
-    
-}
-
-
-body {
-    overflow-x: hidden;
 }
 
 .phase {
@@ -41,7 +35,6 @@ body {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    z-index: 10
 }
 
 .song-info {
@@ -207,7 +200,6 @@ img {
     </div>
     <div class="phase phase1">
         <img src="signpost.png" alt="Signpost Phase 1" id="signpost">
-        안녕!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     </div>
     <div class="phase phase2">
         <!-- 곡 정보 표시기 추가 -->
@@ -392,38 +384,29 @@ img {
         indicator.textContent = `모드: ${currentMode}`;
     }
 
-  function moveToNextPhase() {
-    const currentElement = document.querySelector(`.${currentPhase}`);
-    currentElement.classList.add('slide-out');
-
-    // 이전 페이즈의 요소를 화면 밖으로 밀어냅니다.
-    setTimeout(() => {
-        currentElement.style.display = 'none';
-    }, 500); // 0.5초 후에 display를 none으로 설정 (transition이 끝나는 시점)
-
-    currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
-    const nextElement = document.querySelector(`.${currentPhase}`);
-    nextElement.style.removeProperty('transform'); // transform 스타일 제거
-    nextElement.style.display = 'flex'; // 다음 페이즈 요소를 화면에 표시합니다.
-
-    // 페이즈2가 아니면 무조건 일시정지 모드로 설정
-    if (currentPhase !== 'phase2') {
-        currentMode = '일시정지';
-        if (player) {
-            player.pauseVideo();
-        }
-        document.getElementById('frameImage').src = 'frame_0.png';
-        document.getElementById('controlButton').src = '재생버튼.png';
-        updateModeIndicator();
-    } else {
-        // 페이즈2로 진입할 때 플레이어 상태 초기화
-        if (player) {
-            player.stopVideo();
+   function moveToNextPhase() {
+        const currentElement = document.querySelector(`.${currentPhase}`);
+        currentElement.classList.add('slide-out');
+        currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
+        const nextElement = document.querySelector(`.${currentPhase}`);
+        nextElement.style.transform = 'translateX(0%)';
+    
+        // 페이즈2가 아니면 무조건 일시정지 모드로 설정
+        if (currentPhase !== 'phase2') {
+            currentMode = '일시정지';
+            if (player) {
+                player.pauseVideo();
+            }
+            document.getElementById('frameImage').src = 'frame_0.png';
+            document.getElementById('controlButton').src = '재생버튼.png';
+            updateModeIndicator();
+        } else {
+            // 페이즈2로 진입할 때 플레이어 상태 초기화
+            if (player) {
+                player.stopVideo();
+            }
         }
     }
-}
-
-
 
 
 
