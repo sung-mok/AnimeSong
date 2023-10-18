@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
         body, html {
             height: 100%;
@@ -372,39 +372,35 @@
 
 
    function preloadAssets() {
-            const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
-            let loadedCount = 0;
-            const totalToLoad = imagesToLoad.length + 1; // 이미지 개수 + JSON 파일 1개
-            
-            // 이미지 미리 로드
-            imagesToLoad.forEach(src => {
-                const img = new Image();
-                img.onload = () => {
-                    loadedCount++;
-                    if (loadedCount === totalToLoad) {
-                        moveToNextPhase();
-                    }
-                };
-                img.src = src;
+        const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
+        let loadedCount = 0;
+        const totalToLoad = imagesToLoad.length + 1; // 이미지 개수 + JSON 파일 1개
+        
+        // 이미지 미리 로드
+        imagesToLoad.forEach(src => {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === totalToLoad) {
+                    moveToNextPhase();
+                }
+            };
+            img.src = src;
+        });
+        
+        // Song.json 파일 불러오기
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = Object.entries(data.Sheet1).map(([id, song]) => ({...song, id})); // 각 곡 객체에 ID 추가
+                playOrder = songs.map(song => song.id); // 곡 ID들만 추출
+                shuffle(playOrder); // 재생 순서를 랜덤하게 섞음
+                loadedCount++;
+                if (loadedCount === totalToLoad) {
+                    moveToNextPhase();
+                }
             });
-            
-            // Song.json 파일 불러오기
-            fetch('./Song.json')
-                .then(response => response.json())
-                .then(data => {
-                    songs = Object.entries(data.Sheet1).map(([id, song]) => {
-                        song.id = Number(id);  // 각 노래 객체에 id 필드 추가
-                        return song;
-                    });
-                    playOrder = songs.map(song => song.id);  // 곡 ID들만 추출
-                    shuffle(playOrder); // 재생 순서를 랜덤하게 섞음
-                    loadedCount++;
-                    if (loadedCount === totalToLoad) {
-                        moveToNextPhase();
-                    }
-                });
-        }
-
+    }
 
 
 
