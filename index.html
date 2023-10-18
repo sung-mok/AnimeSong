@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습2</title>
+    <title>재생연습3</title>
     <style>
 body, html {
     height: 100%;
@@ -307,6 +307,13 @@ function moveToNextPhase() {
             player.stopVideo();
         }
     }
+
+    if (currentPhase === 'phase2') {
+        loadSongs();  // 페이즈2로 전환될 때 노래 목록을 불러옵니다.
+        if (player) {
+            player.stopVideo();
+        }
+    }
 }
 
 function togglePlaybackMode() {
@@ -372,7 +379,7 @@ function recreatePlayer() {
 
 function onPlayerReady(event) {
     console.log("Player is ready!");
-    loadSongs();
+    
     
 }
 
@@ -384,8 +391,13 @@ function loadSongs() {
                 song.id = id;
                 return song;
             });
-            playOrder = songs.map(song => song.id);  // 이 부분을 추가하여 모든 노래의 ID를 playOrder 배열에 추가합니다.
-            shuffle(playOrder);  // playOrder 배열을 섞어서 랜덤한 재생 순서를 얻습니다.
+            
+            // 노래 목록을 무작위로 섞습니다.
+            shuffle(songs);
+            
+            // 섞인 노래 목록에서 상위 5곡만 선택합니다.
+            playOrder = songs.slice(0, 5).map(song => song.id);
+            
             updateSongCount();
         });
 }
