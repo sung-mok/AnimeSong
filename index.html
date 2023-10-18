@@ -193,6 +193,25 @@ img {
     }
 }
 
+
+.phase3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.results-container {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+}
+
     </style>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -223,6 +242,13 @@ img {
             <button class="option" id="option3">보기3</button>
         </div>
     </div>
+    <div class="phase phase3">
+    <div class="results-container">
+        <h2>퀴즈 결과</h2>
+        <ul id="resultsList"></ul>
+        <p id="finalScore"></p>
+    </div>
+    </div>
 
     <script>
     let currentPhase = 'phase0';
@@ -230,6 +256,7 @@ img {
     let progressBarInterval;
     let playOrder = []; // 재생 순서를 저장할 배열
     let currentIndex = 0; // 현재 재생 중인 노래의 인덱스
+    let answeredQuestions = []; // 사용자의 답과 결과를 저장하는 배열
 
     let player;
     let songs = [];
@@ -306,7 +333,7 @@ img {
 
   function playNextSong() {
     if (playOrder.length === 0) {
-        alert("모든 노래를 재생하였습니다.");
+        moveToPhase3();
         return;
     }
 
@@ -505,16 +532,47 @@ img {
         
        function checkAnswer(selectedOption) {
             const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
+            let isCorrect = false;
+        
             if (selectedOption.textContent === correctTitle) {
+                isCorrect = true;
                 alert("정답입니다!");
             } else {
                 alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
             }
         
+            // 사용자의 답과 결과를 저장
+            answeredQuestions.push({
+                question: correctTitle,
+                userAnswer: selectedOption.textContent,
+                correct: isCorrect
+            });
+        
             // 다음 노래와 문제 로드
             playNextSong();
         }
 
+
+        function moveToPhase3() {
+            moveToNextPhase(); // 페이즈3로 이동
+            displayResults();
+        }
+
+
+        function displayResults() {
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = ''; // 초기화
+        
+            answeredQuestions.forEach(question => {
+                const li = document.createElement('li');
+                li.textContent = `문제: ${question.question}, 당신의 답: ${question.userAnswer}, 결과: ${question.correct ? '맞음' : '틀림'}`;
+                resultsList.appendChild(li);
+            });
+        
+            const correctAnswers = answeredQuestions.filter(q => q.correct).length;
+            const finalScore = document.getElementById('finalScore');
+            finalScore.textContent = `총 점수: ${correctAnswers}/${answeredQuestions.length}`;
+        }
         
         // 각 보기 버튼에 이벤트 리스너 추가
         document.getElementById('option1').addEventListener('click', function() {
