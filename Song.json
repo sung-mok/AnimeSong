@@ -122,7 +122,7 @@
     "18": {
       "title": "원피스 op",
       "related_work": "원피스",
-      "youtube_link": "https://www.youtube.com/watch?v=junvn7qKikc",
+      "youtube_link": "https://www.youtube.com/watch?v=QbI_N4M5GFc",
       "answer": "원피스",
       "Kor": 1
     },
@@ -299,6 +299,55 @@
       "related_work": "짱구는 못말려",
       "youtube_link": "https://www.youtube.com/watch?v=9PfIi4nXJ6E",
       "answer": "짱구는 못말려",
+      "Kor": 1
+    },
+    "44": {
+      "title": "전설의 용사 다간 op",
+      "related_work": "전설의 용사 다간",
+      "youtube_link": "https://www.youtube.com/watch?v=u0nuP3x6fN8",
+      "answer": "전설의 용사 다간",
+      "Kor": 1
+    },
+    "45": {
+      "title": "사자왕 가오가이거 op",
+      "related_work": "사자왕 가오가이거",
+      "youtube_link": "https://www.youtube.com/watch?v=BrEhsJ8sSIg",
+      "answer": "사자왕 가오가이거",
+      "Kor": 1
+    },
+    "46": {
+      "title": "로봇 수사대 k-캅스 op",
+      "related_work": "로봇 수사대 k-캅스",
+      "youtube_link": "https://www.youtube.com/watch?v=tPq_dyQ3GMw",
+      "answer": "로봇 수사대 k-캅스",
+      "Kor": 1
+    },
+    "47": {
+      "title": "슈퍼 그랑죠 op",
+      "related_work": "슈퍼 그랑죠",
+      "youtube_link": "https://www.youtube.com/watch?v=grAeFpEdtG4",
+      "answer": "슈퍼 그랑죠",
+      "Kor": 1
+    },
+    "48": {
+      "title": "꾸러기 수비대 op",
+      "related_work": "꾸러기 수비대",
+      "youtube_link": "https://www.youtube.com/watch?v=9J_3R2Nphac",
+      "answer": "꾸러기 수비대",
+      "Kor": 1
+    },
+    "49": {
+      "title": "뾰로롱 꼬마마녀 op",
+      "related_work": "뾰로롱 꼬마마녀",
+      "youtube_link": "https://www.youtube.com/watch?v=f42e4nhsIt0",
+      "answer": "뾰로롱 꼬마마녀",
+      "Kor": 1
+    },
+    "50": {
+      "title": "두치와 뿌꾸 op",
+      "related_work": "두치와 뿌꾸",
+      "youtube_link": "https://www.youtube.com/watch?v=PBku_yIDUCI",
+      "answer": "두치와 뿌꾸",
       "Kor": 1
     }
   }
