@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈3-3</title>
+    <title>페이즈3-4</title>
     <style>
 body, html {
     height: 100%;
@@ -444,10 +444,9 @@ function playSong(youtubeLink) {
 function showSongInfo(song) {
     const songInfoElement = document.getElementById('songInfo');
     songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
-    songInfoElement.style.display = 'block';
-
-    setOptions(song.title);
+    // songInfoElement.style.display = 'block'; // 이 부분을 주석 처리하거나 삭제합니다.
 }
+
 
 function setOptions(correctTitle) {
     const options = [correctTitle];
