@@ -382,6 +382,8 @@ function loadSongs() {
 function playNextSong() {
     if (playOrder.length === 0) {
         alert("모든 노래를 재생하였습니다.");
+        console.log("Current songId:", songId);
+        console.log("All song IDs in songs array:", songs.map(s => s.id));
         return;
     }
 
