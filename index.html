@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습4</title>
+    <title>재생연습1</title>
     <style>
 body, html {
     height: 100%;
@@ -333,11 +333,12 @@ function togglePlaybackMode() {
 }
 
 function onYouTubeIframeAPIReady() {
-     console.log("YouTube API is ready!"); // 이 로그가 출력되는지 확인
+    console.log("YouTube API is ready!");
     player = new YT.Player('youtubePlayer', {
         height: '0',
         width: '0',
         videoId: '',
+        origin: window.location.origin,  // 이 줄을 추가하세요.
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
