@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습4</title>
+    <title>재생연습5</title>
     <style>
 body, html {
     height: 100%;
@@ -224,11 +224,319 @@ img {
         </div>
     </div>
 
-    <script type="module" src="YouTubeManager.js"></script>
-<script type="module" src="SongManager.js"></script>
-<script type="module" src="UIManager.js"></script>
-<script type="module" src="main.js"></script>
+    <script>
+    let currentPhase = 'phase0';
+    let currentMode = '일시정지';
+    let progressBarInterval;
+    let playOrder = []; // 재생 순서를 저장할 배열
+    let currentIndex = 0; // 현재 재생 중인 노래의 인덱스
 
+    let player;
+    let songs = [];
+
+    // 유튜브 API 준비 완료 시 호출되는 함수
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtubePlayer', {
+            height: '0',
+            width: '0',
+            videoId: '',
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange // 상태 변경 이벤트 추가
+            }
+        });
+    }
+
+
+    function onPlayerStateChange(event) {
+        // 노래가 끝났을 때
+        if (event.data === YT.PlayerState.ENDED) {
+            // 프로그래스바를 0%로 설정
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = '0%';
+    
+            // 다음 노래 재생
+            player.playVideo();
+        }
+    }
+
+
+
+
+
+     function recreatePlayer() {
+        if (player) {
+            player.destroy();
+        }
+    
+        player = new YT.Player('youtubePlayer', {
+            height: '0',
+            width: '0',
+            videoId: '',
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+
+
+
+        
+    function onPlayerReady(event) {
+        // 곡 목록을 로드합니다.
+        
+    }
+    
+      function loadSongs() {
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = Object.entries(data.Sheet1).map(([id, song]) => {
+                    song.id = Number(id);  // 각 노래 객체에 id 필드 추가
+                    return song;
+                });
+                updateSongCount();
+            });
+    }
+
+
+
+
+  function playNextSong() {
+    if (playOrder.length === 0) {
+        alert("모든 노래를 재생하였습니다.");
+        return;
+    }
+
+    const songId = playOrder[0];
+    
+    if (!songId) {
+        console.error("Song ID is undefined. Current playOrder:", playOrder);
+        return;
+    }
+
+    const song = songs.find(s => s.id === songId);
+
+    if (!song) {
+        alert("노래를 찾을 수 없습니다.");
+        return;
+    }
+
+    playSong(song.youtube_link);
+    showSongInfo(song);
+
+    playOrder.splice(0, 1);
+    updateSongCount();
+}
+
+
+
+
+    function playSong(youtubeLink) {
+        const videoId = youtubeLink.split("v=")[1];
+        player.loadVideoById(videoId);
+    }
+
+    function showSongInfo(song) {
+        const songInfoElement = document.getElementById('songInfo');
+        songInfoElement.textContent = `제목: ${song.title}, 작품: ${song.related_work}`;
+        songInfoElement.style.display = 'block';
+    
+        setOptions(song.title);
+    }
+
+
+  function togglePlaybackMode() {
+    if (currentMode === '일시정지') {
+        currentMode = '재생';
+        
+        // 현재 노래가 없으면 임의의 노래를 선택하여 재생
+        if (!player.getVideoData().video_id) {
+            playNextSong();
+        } else {
+            // 기존 노래를 계속 재생
+            player.playVideo();
+        }
+
+        document.getElementById('frameImage').src = 'tape.gif';
+        document.getElementById('controlButton').src = '일시정지버튼.png';
+
+        // 프로그래스 바를 주기적으로 업데이트
+        progressBarInterval = setInterval(updateProgressBar, 1000); // 1초마다 업데이트
+
+    } else {
+        currentMode = '일시정지';
+
+        // 현재 노래를 일시정지
+        player.pauseVideo();
+
+        document.getElementById('frameImage').src = 'frame_0.png';
+        document.getElementById('controlButton').src = '재생버튼.png';
+
+        // 프로그래스 바 업데이트 중지
+        clearInterval(progressBarInterval);
+    }
+
+    updateModeIndicator();
+}
+
+
+    function updateModeIndicator() {
+        const indicator = document.getElementById('modeIndicator');
+        indicator.textContent = `모드: ${currentMode}`;
+    }
+
+   function moveToNextPhase() {
+        const currentElement = document.querySelector(`.${currentPhase}`);
+        currentElement.classList.add('slide-out');
+        currentPhase = `phase${parseInt(currentPhase.replace('phase', '')) + 1}`;
+        const nextElement = document.querySelector(`.${currentPhase}`);
+        nextElement.style.transform = 'translateX(0%)';
+    
+        // 페이즈2가 아니면 무조건 일시정지 모드로 설정
+        if (currentPhase !== 'phase2') {
+            currentMode = '일시정지';
+            if (player) {
+                player.pauseVideo();
+            }
+            document.getElementById('frameImage').src = 'frame_0.png';
+            document.getElementById('controlButton').src = '재생버튼.png';
+            updateModeIndicator();
+        } else {
+            // 페이즈2로 진입할 때 플레이어 상태 초기화
+            if (player) {
+                player.stopVideo();
+            }
+        }
+    }
+
+
+
+   function preloadAssets() {
+        const imagesToLoad = ["signpost.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
+        let loadedCount = 0;
+        const totalToLoad = imagesToLoad.length + 1; // 이미지 개수 + JSON 파일 1개
+        
+        // 이미지 미리 로드
+        imagesToLoad.forEach(src => {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === totalToLoad) {
+                    moveToNextPhase();
+                }
+            };
+            img.src = src;
+        });
+        
+        // Song.json 파일 불러오기
+        fetch('./Song.json')
+            .then(response => response.json())
+            .then(data => {
+                songs = Object.entries(data.Sheet1).map(([id, song]) => ({...song, id})); // 각 곡 객체에 ID 추가
+                playOrder = songs.map(song => song.id); // 곡 ID들만 추출
+                shuffle(playOrder); // 재생 순서를 랜덤하게 섞음
+                loadedCount++;
+                if (loadedCount === totalToLoad) {
+                    moveToNextPhase();
+                }
+            });
+
+       recreatePlayer();
+    }
+
+
+
+
+    
+    // 배열을 랜덤하게 섞는 함수
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+
+
+
+
+    function updateSongCount() {
+        const songCountElement = document.getElementById('songCount');
+        songCountElement.textContent = `곡 수: ${playOrder.length}`;
+    }
+
+
+
+    function updateProgressBar() {
+        const currentTime = player.getCurrentTime();
+        const duration = player.getDuration();
+        const progressPercentage = (currentTime / duration) * 100;
+    
+        const progressBar = document.getElementById('progressBar');
+        progressBar.style.width = `${progressPercentage}%`;
+    }
+
+
+
+
+
+
+
+        function setOptions(correctTitle) {
+            const options = [correctTitle];
+            while (options.length < 3) {
+                const randomIndex = Math.floor(Math.random() * songs.length);
+                const title = songs[randomIndex].title;
+                if (options.indexOf(title) === -1) {
+                    options.push(title);
+                }
+            }
+        
+            // 보기 순서를 랜덤하게 섞기
+            options.sort(() => Math.random() - 0.5);
+        
+            document.getElementById('option1').textContent = options[0];
+            document.getElementById('option2').textContent = options[1];
+            document.getElementById('option3').textContent = options[2];
+        }
+        
+       function checkAnswer(selectedOption) {
+            const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
+            if (selectedOption.textContent === correctTitle) {
+                alert("정답입니다!");
+            } else {
+                alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
+            }
+        
+            // 다음 노래와 문제 로드
+            playNextSong();
+        }
+
+        
+        // 각 보기 버튼에 이벤트 리스너 추가
+        document.getElementById('option1').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+        document.getElementById('option2').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+        document.getElementById('option3').addEventListener('click', function() {
+            checkAnswer(this);
+        });
+
+        
+    document.getElementById('signpost').addEventListener('click', moveToNextPhase);
+    document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
+    document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
+
+    window.onload = function() {
+        updateModeIndicator();
+        preloadAssets();
+    };
+</script>
 
 </body>
 
