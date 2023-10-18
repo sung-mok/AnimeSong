@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재생연습1</title>
+    <title>재생연습2</title>
     <style>
 body, html {
     height: 100%;
@@ -260,7 +260,9 @@ function preloadAssets() {
         const img = new Image();
         img.onload = () => {
             loadedCount++;
-            // moveToNextPhase 함수 호출 코드를 제거합니다.
+            if (loadedCount === totalToLoad) {
+                moveToNextPhase();
+            }
         };
         img.src = src;
     });
@@ -272,10 +274,10 @@ function preloadAssets() {
             playOrder = songs.map(song => song.id);
             shuffle(playOrder);
             loadedCount++;
-            // moveToNextPhase 함수 호출 코드를 제거합니다.
+            if (loadedCount === totalToLoad) {
+                moveToNextPhase();
+            }
         });
-
-    recreatePlayer();
 }
 
 function moveToNextPhase() {
