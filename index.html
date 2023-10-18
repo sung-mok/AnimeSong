@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈3-3</title>
+    <title>페이즈3-4</title>
     <style>
 body, html {
     height: 100%;
@@ -240,6 +240,7 @@ let player;
 let songs = [];
 let selectedSongs = [];  // 랜덤으로 선택된 5곡의 정보를 저장합니다.
 let results = [];  // 각 곡에 대한 정답 여부를 저장합니다.
+let numberOfSongsInPhase2 = 10;
 
 function initialize() {
     updateModeIndicator();
@@ -404,7 +405,7 @@ function loadSongs() {
             shuffle(songs);
             
             // 섞인 노래 목록에서 상위 5곡만 선택합니다.
-            playOrder = songs.slice(0, 10).map(song => song.id);
+            playOrder = songs.slice(0, numberOfSongsInPhase2).map(song => song.id);
             selectedSongs = songs.slice(0, 5);
             updateSongCount();
         });
@@ -483,12 +484,12 @@ function checkAnswer(selectedOption) {
         alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
     }
 
-    if (results.length === selectedSongs.length) {
-        moveToNextPhase();
-        showResults();
-    } else {
-        playNextSong();
-    }
+    if (results.length === numberOfSongsInPhase2) {
+    moveToNextPhase();
+    showResults();
+} else {
+    playNextSong();
+}
     
 }
 
