@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈1-1</title>
+    <title>페이즈2-1</title>
     <style>
 body, html {
     height: 100%;
@@ -198,6 +198,21 @@ img {
 .play-button {
     cursor: pointer;
 }
+
+
+.flash {
+    animation: flashAnimation 0.5s;
+}
+
+@keyframes flashAnimation {
+    0%, 100% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: #FFD700; /* 깜빡일 때의 배경색. 원하는 색으로 변경 가능 */
+    }
+}
+
 
 #signpost {
     max-width: 50%;
@@ -577,19 +592,35 @@ function checkAnswer(selectedOption) {
     const correctTitle = document.getElementById('songInfo').textContent.split(":")[1].trim().split(",")[0];
     const isCorrect = selectedOption.textContent === correctTitle;
     results.push(isCorrect);
-    if (selectedOption.textContent === correctTitle) {
+
+    // 보기 깜빡이기
+    selectedOption.classList.add('flash');
+    setTimeout(() => {
+        selectedOption.classList.remove('flash');
+    }, 500);
+
+    if (isCorrect) {
         alert("정답입니다!");
     } else {
         alert("틀렸습니다. 정답은 " + correctTitle + " 입니다.");
     }
 
-    if (results.length === numberOfSongsInPhase2) {
-    moveToNextPhase();
-    showResults();
-} else {
-    playNextSong();
-}
-    
+    // 강제로 0.5초 동안 일시정지 상태 유지
+    if (currentMode === '재생') {
+        togglePlaybackMode(); // 일시정지 모드로 전환
+    }
+
+    setTimeout(() => {
+        if (results.length === numberOfSongsInPhase2) {
+            moveToNextPhase();
+            showResults();
+        } else {
+            if (currentMode === '일시정지') {
+                togglePlaybackMode(); // 재생 모드로 전환
+            }
+            playNextSong();
+        }
+    }, 500);
 }
 
 function shuffle(array) {
