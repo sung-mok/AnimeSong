@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-9</title>
+    <title>페이즈2-10</title>
     <style>
 body, html {
     height: 100%;
@@ -562,10 +562,24 @@ function playNextSong() {
     progressBarInterval = setInterval(updateProgressBar, 1000);
 }
 
+function getVideoIdFromLink(youtubeLink) {
+    if (youtubeLink.includes("watch?v=")) {
+        return youtubeLink.split("watch?v=")[1];
+    } else if (youtubeLink.includes("youtu.be/")) {
+        return youtubeLink.split("youtu.be/")[1];
+    }
+    return null;  // 올바르지 않은 링크 형식일 경우 null 반환
+}
+
+
 
 function playSong(youtubeLink) {
-    const videoId = youtubeLink.split("v=")[1];
-    player.loadVideoById(videoId);
+    const videoId = getVideoIdFromLink(youtubeLink);
+    if (videoId) {
+        player.loadVideoById(videoId);
+    } else {
+        console.error("Invalid YouTube link:", youtubeLink);
+    }
 }
 
 function showSongInfo(song) {
