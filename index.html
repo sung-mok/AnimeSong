@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-2</title>
+    <title>페이즈2-3</title>
     <style>
 body, html {
     height: 100%;
@@ -593,11 +593,14 @@ function checkAnswer(selectedOption) {
     const isCorrect = selectedOption.textContent === correctTitle;
     results.push(isCorrect);
 
-    // 보기 깜빡이기
-    selectedOption.classList.add('flash');
-    setTimeout(() => {
-        selectedOption.classList.remove('flash');
-    }, 500);
+    // 정답인 보기를 찾아서 깜빡이게 하기
+    const correctOption = Array.from(document.querySelectorAll('.option')).find(option => option.textContent === correctTitle);
+    if (correctOption) {
+        correctOption.classList.add('flash');
+        setTimeout(() => {
+            correctOption.classList.remove('flash');
+        }, 500);
+    }
 
     // 강제로 0.5초 동안 일시정지 상태 유지
     if (currentMode === '재생') {
