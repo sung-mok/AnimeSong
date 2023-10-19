@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈3-5</title>
+    <title>페이즈3-6</title>
     <style>
 body, html {
     height: 100%;
@@ -46,6 +46,33 @@ body {
     background-repeat: no-repeat;           /* 배경 이미지를 반복하지 않습니다. */
     background-size: cover;                 /* 배경 이미지를 컨테이너에 맞게 조절합니다. */
     background-position: center center;     /* 배경 이미지의 위치를 중앙으로 설정합니다. */
+}
+
+
+.signpost {
+    position: absolute;
+    left: 0;
+    width: auto;
+    height: auto;
+    max-height: 25%;  /* 전체 높이의 1/4 크기를 갖도록 설정. 조절이 필요할 수 있습니다. */
+    cursor: pointer;  /* 클릭 가능한 요소임을 나타내기 위해 */
+}
+
+
+#signpost_10 {
+    top: 0;  /* 가장 위에 위치 */
+}
+
+#signpost_30 {
+    top: 25%;  /* 전체 높이의 1/4 위치 */
+}
+
+#signpost_50 {
+    top: 50%;  /* 중간에 위치 */
+}
+
+#signpost_100 {
+    bottom: 0;  /* 가장 아래에 위치 */
 }
 
 .song-info {
@@ -235,7 +262,11 @@ img {
         <div class="loading-indicator"></div>
     </div>
     <div class="phase phase1">
-        <img src="signpost.png" alt="Signpost Phase 1" id="signpost">
+        <!-- 4개의 새로운 이미지를 추가 -->
+        <img src="signpost_10.png" alt="Signpost 10" class="signpost" id="signpost_10">
+        <img src="signpost_30.png" alt="Signpost 30" class="signpost" id="signpost_30">
+        <img src="signpost_50.png" alt="Signpost 50" class="signpost" id="signpost_50">
+        <img src="signpost_100.png" alt="Signpost 100" class="signpost" id="signpost_100">
     </div>
     <div class="phase phase2">
         <!-- 곡 정보 표시기 추가 -->
@@ -280,7 +311,9 @@ function initialize() {
 }
 
 function setupEventListeners() {
-    document.getElementById('signpost').addEventListener('click', moveToNextPhase);
+    // 기존의 signpost 클릭 이벤트 리스너 설정 코드는 제거되었습니다.
+    // document.getElementById('signpost').addEventListener('click', moveToNextPhase);
+
     document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
     document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
 
@@ -288,6 +321,11 @@ function setupEventListeners() {
         document.getElementById(optionId).addEventListener('click', function() {
             checkAnswer(this);
         });
+    });
+
+    // 새로 추가된 signpost 이미지들에 대한 클릭 이벤트 리스너 설정 코드
+    ['signpost_10', 'signpost_30', 'signpost_50', 'signpost_100'].forEach(signpostId => {
+        document.getElementById(signpostId).addEventListener('click', moveToNextPhase);
     });
 }
 
