@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-7</title>
+    <title>페이즈2-8</title>
     <style>
 body, html {
     height: 100%;
@@ -536,6 +536,7 @@ function loadSongs() {
 
 
 function playNextSong() {
+    player.stopVideo();
     const songId = playOrder[0];
 
     const song = songs.find(s => s.id === songId);
