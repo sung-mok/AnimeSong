@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-4</title>
+    <title>페이즈2-6title>
     <style>
 body, html {
     height: 100%;
@@ -277,6 +277,13 @@ img {
     font-weight: bold;
 }
 
+
+.feedback-image {
+    width: 30%;
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
     </style>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -295,6 +302,8 @@ img {
         <img src="signpost_100.png" alt="Signpost 100" class="signpost" id="signpost_100">
     </div>
     <div class="phase phase2">
+        <!-- 피드백 이미지 추가 -->
+        <img class="feedback-image" src="" alt="Feedback Image" id="feedbackImage" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;">
         <!-- 곡 정보 표시기 추가 -->
         <div class="song-info" id="songInfo"></div>
         <div id="youtubePlayer"></div>
@@ -593,10 +602,12 @@ function checkAnswer(selectedOption) {
     const isCorrect = selectedOption.textContent === correctTitle;
     results.push(isCorrect);
 
+    
     // 정답 또는 오답 이미지 보여주기
     const feedbackImageElement = document.getElementById('feedbackImage');
     feedbackImageElement.src = isCorrect ? '정답.png' : '틀림.png';
     feedbackImageElement.style.opacity = '1';
+
 
     setTimeout(() => {
         feedbackImageElement.style.opacity = '0';
