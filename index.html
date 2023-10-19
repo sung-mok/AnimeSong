@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-3</title>
+    <title>페이즈2-4</title>
     <style>
 body, html {
     height: 100%;
@@ -364,7 +364,7 @@ function setupEventListeners() {
 
 
 function preloadAssets() {
-    const imagesToLoad = ["signpost_10.png","signpost_30.png","signpost_50.png","signpost_100.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
+    const imagesToLoad = ["signpost_10.png","signpost_30.png","signpost_50.png","signpost_100.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png","정답.png","틀림.png"];
 
     let loadedItems = 0;
     const totalItems = imagesToLoad.length + 1; // +1 for the JSON
@@ -593,14 +593,14 @@ function checkAnswer(selectedOption) {
     const isCorrect = selectedOption.textContent === correctTitle;
     results.push(isCorrect);
 
-    // 정답인 보기를 찾아서 깜빡이게 하기
-    const correctOption = Array.from(document.querySelectorAll('.option')).find(option => option.textContent === correctTitle);
-    if (correctOption) {
-        correctOption.classList.add('flash');
-        setTimeout(() => {
-            correctOption.classList.remove('flash');
-        }, 500);
-    }
+    // 정답 또는 오답 이미지 보여주기
+    const feedbackImageElement = document.getElementById('feedbackImage');
+    feedbackImageElement.src = isCorrect ? '정답.png' : '틀림.png';
+    feedbackImageElement.style.opacity = '1';
+
+    setTimeout(() => {
+        feedbackImageElement.style.opacity = '0';
+    }, 500);
 
     // 강제로 0.5초 동안 일시정지 상태 유지
     if (currentMode === '재생') {
@@ -619,7 +619,6 @@ function checkAnswer(selectedOption) {
         }
     }, 500);
 }
-
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
