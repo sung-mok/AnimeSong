@@ -585,7 +585,7 @@ function playSong(youtubeLink) {
 function showSongInfo(song) {
     const songInfoElement = document.getElementById('songInfo');
     songInfoElement.textContent = `작품: ${song.related_work}, 제목: ${song.title}`;
-    songInfoElement.style.display = 'block';
+    //songInfoElement.style.display = 'block';
 
     setOptions(song.related_work);
 }
