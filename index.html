@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-6</title>
+    <title>페이즈2-7</title>
     <style>
 body, html {
     height: 100%;
@@ -606,11 +606,13 @@ function checkAnswer(selectedOption) {
     // 정답 또는 오답 이미지 보여주기
     const feedbackImageElement = document.getElementById('feedbackImage');
     feedbackImageElement.src = isCorrect ? '정답.png' : '틀림.png';
+    feedbackImageElement.style.display = 'block';  // <-- 이 부분 추가
     feedbackImageElement.style.opacity = '1';
 
 
     setTimeout(() => {
         feedbackImageElement.style.opacity = '0';
+        feedbackImageElement.style.display = 'none';  // <-- 이 부분 추가
     }, 500);
 
     // 강제로 0.5초 동안 일시정지 상태 유지
