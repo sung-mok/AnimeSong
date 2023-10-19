@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈3-7</title>
+    <title>페이즈0-1</title>
     <style>
 body, html {
     height: 100%;
@@ -252,6 +252,16 @@ img {
     }
 }
 
+
+.loading-text {
+    position: absolute;
+    top: 60%; /* 위치를 조정할 수 있습니다 */
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
     </style>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -260,6 +270,7 @@ img {
 <body>
     <div class="phase phase0">
         <div class="loading-indicator"></div>
+        <div class="loading-text" id="loadingText">0%</div> <!-- 추가된 로딩 텍스트 -->
     </div>
     <div class="phase phase1">
         <!-- 4개의 새로운 이미지를 추가 -->
@@ -331,32 +342,43 @@ function setupEventListeners() {
 
 function preloadAssets() {
     const imagesToLoad = ["signpost_10.png","signpost_30.png","signpost_50.png","signpost_100.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
-    
-    // 이미지 프리로딩
+
+    let loadedItems = 0;
+    const totalItems = imagesToLoad.length + 1; // +1 for the JSON
+
+    const updateLoadingPercentage = () => {
+        const percentage = Math.round((loadedItems / totalItems) * 100);
+        document.getElementById('loadingText').textContent = percentage + "%";
+    };
+
     const imagePromises = imagesToLoad.map(src => {
         return new Promise((resolve, reject) => {
             const img = new Image();
-            img.onload = resolve;
+            img.onload = () => {
+                loadedItems++;
+                updateLoadingPercentage();
+                resolve();
+            };
             img.onerror = reject;
             img.src = src;
         });
     });
 
-    // JSON 프리로딩
     const jsonPromise = fetch('./Song.json')
         .then(response => response.json())
         .then(data => {
             songs = Object.entries(data.Sheet1).map(([id, song]) => ({...song, id}));
+            loadedItems++;
+            updateLoadingPercentage();
         });
 
-    // 모든 프리로딩 작업이 완료되면 moveToNextPhase 함수를 호출
     Promise.all([...imagePromises, jsonPromise])
         .then(() => {
             recreatePlayer()
             moveToNextPhase();
         });
-    
 }
+
 
 
 
