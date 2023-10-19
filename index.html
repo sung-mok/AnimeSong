@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-10</title>
+    <title>페이즈2-11</title>
     <style>
 body, html {
     height: 100%;
@@ -617,17 +617,29 @@ function checkAnswer(selectedOption) {
     const isCorrect = selectedOption.textContent === correctTitle;
     results.push(isCorrect);
 
-    
     // 정답 또는 오답 이미지 보여주기
     const feedbackImageElement = document.getElementById('feedbackImage');
     feedbackImageElement.src = isCorrect ? '정답.png' : '틀림.png';
-    feedbackImageElement.style.display = 'block';  // <-- 이 부분 추가
+    feedbackImageElement.style.display = 'block';
     feedbackImageElement.style.opacity = '1';
 
+    // 정답인 보기 찾기
+    const options = [document.getElementById('option1'), document.getElementById('option2'), document.getElementById('option3')];
+    const correctOption = options.find(option => option.textContent === correctTitle);
+
+    // 정답인 보기에 깜빡이는 효과 적용
+    if (correctOption) {
+        correctOption.classList.add('flash');
+
+        // 일정 시간 후 깜빡이는 효과 제거
+        setTimeout(() => {
+            correctOption.classList.remove('flash');
+        }, 1000);  // 1초 후 깜빡이는 효과 제거. 원하는 시간으로 조절 가능
+    }
 
     setTimeout(() => {
         feedbackImageElement.style.opacity = '0';
-        feedbackImageElement.style.display = 'none';  // <-- 이 부분 추가
+        feedbackImageElement.style.display = 'none';
     }, 500);
 
     // 강제로 0.5초 동안 일시정지 상태 유지
@@ -647,6 +659,7 @@ function checkAnswer(selectedOption) {
         }
     }, 500);
 }
+
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
