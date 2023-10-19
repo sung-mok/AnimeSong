@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈2-11</title>
+    <title>페이즈2-12</title>
     <style>
 body, html {
     height: 100%;
@@ -56,7 +56,22 @@ body {
     height: auto;
     max-height: 25%;  /* 전체 높이의 1/4 크기를 갖도록 설정. 조절이 필요할 수 있습니다. */
     cursor: pointer;  /* 클릭 가능한 요소임을 나타내기 위해 */
+
+    
 }
+
+
+
+
+.signpost:hover {
+    transform: scale(1.05); /* 마우스 오버 시 이미지 크기 5% 증가 */
+    transition: transform 0.2s; /* 0.2초 동안 크기 변화 효과 */
+}
+
+.signpost:active {
+    transform: scale(1.1); /* 클릭 시 이미지 크기 10% 증가 */
+}
+
 
 
 #signpost_10 {
@@ -356,7 +371,7 @@ function setupEventListeners() {
     });
 
     // 새로 추가된 signpost 이미지들에 대한 클릭 이벤트 리스너 설정
-    const signposts = [
+      const signposts = [
         { id: 'signpost_10', count: 10 },
         { id: 'signpost_30', count: 30 },
         { id: 'signpost_50', count: 50 },
@@ -364,9 +379,14 @@ function setupEventListeners() {
     ];
 
     signposts.forEach(signpost => {
-        document.getElementById(signpost.id).addEventListener('click', function() {
+        const elem = document.getElementById(signpost.id);
+        elem.addEventListener('click', function() {
             numberOfSongsInPhase2 = signpost.count;
             moveToNextPhase();
+            // 클릭 후 이미지 크기를 원래대로 돌려놓는 코드
+            setTimeout(() => {
+                elem.style.transform = 'scale(1)';
+            }, 200); // 0.2초 후에 이미지 크기를 원래대로 돌려놓습니다.
         });
     });
 }
