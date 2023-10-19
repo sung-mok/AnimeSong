@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>페이즈0-1</title>
+    <title>페이즈1-1</title>
     <style>
 body, html {
     height: 100%;
@@ -322,9 +322,6 @@ function initialize() {
 }
 
 function setupEventListeners() {
-    // 기존의 signpost 클릭 이벤트 리스너 설정 코드는 제거되었습니다.
-    // document.getElementById('signpost').addEventListener('click', moveToNextPhase);
-
     document.getElementById('frameImage').addEventListener('click', togglePlaybackMode);
     document.getElementById('controlButton').addEventListener('click', togglePlaybackMode);
 
@@ -334,11 +331,22 @@ function setupEventListeners() {
         });
     });
 
-    // 새로 추가된 signpost 이미지들에 대한 클릭 이벤트 리스너 설정 코드
-    ['signpost_10', 'signpost_30', 'signpost_50', 'signpost_100'].forEach(signpostId => {
-        document.getElementById(signpostId).addEventListener('click', moveToNextPhase);
+    // 새로 추가된 signpost 이미지들에 대한 클릭 이벤트 리스너 설정
+    const signposts = [
+        { id: 'signpost_10', count: 10 },
+        { id: 'signpost_30', count: 30 },
+        { id: 'signpost_50', count: 50 },
+        { id: 'signpost_100', count: 100 }
+    ];
+
+    signposts.forEach(signpost => {
+        document.getElementById(signpost.id).addEventListener('click', function() {
+            numberOfSongsInPhase2 = signpost.count;
+            moveToNextPhase();
+        });
     });
 }
+
 
 function preloadAssets() {
     const imagesToLoad = ["signpost_10.png","signpost_30.png","signpost_50.png","signpost_100.png", "재생버튼.png", "일시정지버튼.png", "tape.gif", "frame_0.png"];
